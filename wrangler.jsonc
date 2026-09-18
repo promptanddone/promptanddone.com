@@ -1,7 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "promptanddone",
-  "account_id": "978315d71597bcba41eb6955973c430b",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-09-18"
 }

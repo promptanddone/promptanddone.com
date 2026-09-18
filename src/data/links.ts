@@ -4,8 +4,9 @@ export const brand = {
   year: 2026,
 };
 
+
 export type Link = {
-  icon: 'instagram' | 'github' | 'website' | 'email';
+  icon: 'instagram' | 'tiktok' | 'youtube' | 'github' | 'website' | 'email';
   label: string;
   href: string;
   ariaLabel: string;
@@ -14,14 +15,19 @@ export type Link = {
   rel?: string;
 };
 
+
 export const links: Link[] = [
   { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/promptanddone', ariaLabel: 'Visit Prompt and Done on Instagram', handle: '@promptanddone' },
+  { icon: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@promptanddoneai', ariaLabel: 'Visit Prompt and Done on TikTok', handle: '@promptanddoneai' },
+  { icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@promptanddone', ariaLabel: 'Visit Prompt and Done on YouTube', handle: '@promptanddone' },
   { icon: 'github', label: 'GitHub', href: 'https://github.com/promptanddone', ariaLabel: 'Visit Prompt and Done on GitHub', handle: '/promptanddone' },
   { icon: 'website', label: 'Website', href: 'https://promptanddone.com', ariaLabel: 'Visit the Prompt and Done website', handle: 'promptanddone.com' },
   { icon: 'email', label: 'Email', href: 'mailto:thepromptanddone@gmail.com', ariaLabel: 'Email Prompt and Done', handle: 'thepromptanddone@gmail.com', external: false },
 ];
 
+
 export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boolean };
+
 
 export const tools: Tool[] = [
   {

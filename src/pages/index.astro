@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Arrow from '../components/Arrow.astro';
+---
+<BaseLayout title="Prompt & Done — Links">
+  <main class="page">
+    <header class="masthead">
+      <h1 class="wordmark">Prompt <span class="accent">&amp;</span> Done</h1>
+      <p class="descriptor">AI tools &amp; productivity, daily.</p>
+    </header>
+
+    <section aria-label="Prompt and Done links">
+      <div class="directory-meta" aria-hidden="true">
+        <span>Directory</span>
+        <span>04 links</span>
+      </div>
+
+      <nav class="link-list" aria-label="Main links">
+        <a class="link-row" href="https://instagram.com/promptanddone" target="_blank" rel="noopener noreferrer" aria-label="Visit Prompt and Done on Instagram">
+          <span class="index">01</span>
+          <span class="label">Instagram</span>
+          <Arrow />
+        </a>
+        <a class="link-row" href="https://github.com/promptanddone" target="_blank" rel="noopener noreferrer" aria-label="Visit Prompt and Done on GitHub">
+          <span class="index">02</span>
+          <span class="label">GitHub</span>
+          <Arrow />
+        </a>
+        <a class="link-row" href="https://promptanddone.com" target="_blank" rel="noopener noreferrer" aria-label="Visit the Prompt and Done website">
+          <span class="index">03</span>
+          <span class="label">Website</span>
+          <Arrow />
+        </a>
+        <a class="link-row" href="mailto:thepromptanddone@gmail.com" aria-label="Email Prompt and Done">
+          <span class="index">04</span>
+          <span class="label">Email</span>
+          <Arrow />
+        </a>
+      </nav>
+    </section>
+
+    <section class="tools-section" aria-labelledby="tools-heading">
+      <h2 class="section-label" id="tools-heading">TOOLS FROM THE VIDEOS</h2>
+
+      <div class="link-list">
+        <a class="link-row" href="https://ref.wisprflow.ai/promptanddone" target="_blank" rel="sponsored noopener noreferrer" aria-label="Try Wispr Flow, an affiliate link that supports Prompt and Done">
+          <span class="index">01</span>
+          <span class="tool-copy">
+            <span class="tool-title-line">
+              <span class="label">Wispr Flow</span>
+              <span class="affiliate-note">Affiliate · supports the channel</span>
+            </span>
+            <span class="tool-description">AI voice dictation that cleans up filler words. Free to start.</span>
+          </span>
+          <Arrow />
+        </a>
+        <a class="link-row" href="https://github.com/Panniantong/Agent-Reach" target="_blank" rel="noopener noreferrer" aria-label="Open Agent-Reach on GitHub">
+          <span class="index">02</span>
+          <span class="tool-copy">
+            <span class="label">Agent-Reach</span>
+            <span class="tool-description">Gives your AI agent eyes on the whole internet.</span>
+          </span>
+          <Arrow />
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Prompt &amp; Done</span>
+      <span class="status">On the internet</span>
+    </footer>
+  </main>
+</BaseLayout>

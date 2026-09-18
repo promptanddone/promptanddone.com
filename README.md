@@ -53,6 +53,6 @@ npx wrangler pages deploy dist --project-name=promptanddone --branch=main
 
 Open the existing Pages project's Deployments tab and roll back to a previous successful production deployment. Revert the corresponding commit on `main` to keep the source aligned with production.
 
-### Activation status
+### Deployment status
 
-The framework and workflow are prepared locally. Publishing the repository changes, adding the API token secret, and verifying the first automatic deployment remain pending.
+The deployment token is configured as an encrypted repository secret. Every push to `main` runs validation, builds the static site, and deploys it to the existing Cloudflare Pages project. Check the repository’s Actions tab for each deployment’s status.

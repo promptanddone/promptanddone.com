@@ -17,6 +17,7 @@ import { brand, links, tools } from '../data/links';
           class="ln"
           href={l.href}
           aria-label={l.ariaLabel}
+          data-umami-event={l.event}
           {...(l.external === false ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
         >
           <span class="i"><Icon name={l.icon} /></span>
@@ -29,7 +30,7 @@ import { brand, links, tools } from '../data/links';
     <section aria-labelledby="tools-head">
       <h2 id="tools-head">Tools from the videos</h2>
       {tools.map((t) => (
-        <a class="ln ln--tool" href={t.href} aria-label={t.ariaLabel} target="_blank" rel={t.rel ?? 'noopener noreferrer'}>
+        <a class="ln ln--tool" href={t.href} aria-label={t.ariaLabel} data-umami-event={t.event} target="_blank" rel={t.rel ?? 'noopener noreferrer'}>
           <span class="lb">{t.label}</span>
           <span class="hd">{t.description}</span>
           {t.affiliate && <span class="aff">affiliate</span>}

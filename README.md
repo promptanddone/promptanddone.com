@@ -1,6 +1,8 @@
 # Prompt & Done
 
-A static site built with Astro. The existing page design, content, and links are preserved. Shared document metadata lives in `src/layouts/BaseLayout.astro`, page content in `src/pages/index.astro`, and styling in `src/styles/global.css`.
+A static site built with Astro.
+
+Link and tool content lives in `src/data/links.ts` — add a tool there and it renders. Shared document metadata lives in `src/layouts/BaseLayout.astro`, page markup in `src/pages/index.astro`, and styling in `src/styles/global.css`. `src/components/Icon.astro` holds the brand marks (official [Simple Icons](https://simpleicons.org) paths, CC0 files; the marks remain their owners' trademarks and are used here only to link to our own accounts).
 
 ## Local development
 

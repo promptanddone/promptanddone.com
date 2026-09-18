@@ -1,0 +1,41 @@
+export const brand = {
+  name: 'Prompt & Done',
+  tagline: 'AI tools & productivity, daily.',
+  year: 2026,
+};
+
+export type Link = {
+  icon: 'instagram' | 'github' | 'website' | 'email';
+  label: string;
+  href: string;
+  ariaLabel: string;
+  handle?: string;
+  external?: boolean;
+  rel?: string;
+};
+
+export const links: Link[] = [
+  { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/promptanddone', ariaLabel: 'Visit Prompt and Done on Instagram', handle: '@promptanddone' },
+  { icon: 'github', label: 'GitHub', href: 'https://github.com/promptanddone', ariaLabel: 'Visit Prompt and Done on GitHub', handle: '/promptanddone' },
+  { icon: 'website', label: 'Website', href: 'https://promptanddone.com', ariaLabel: 'Visit the Prompt and Done website', handle: 'promptanddone.com' },
+  { icon: 'email', label: 'Email', href: 'mailto:thepromptanddone@gmail.com', ariaLabel: 'Email Prompt and Done', handle: 'thepromptanddone@gmail.com', external: false },
+];
+
+export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boolean };
+
+export const tools: Tool[] = [
+  {
+    label: 'Wispr Flow',
+    href: 'https://ref.wisprflow.ai/promptanddone',
+    ariaLabel: 'Try Wispr Flow, an affiliate link that supports Prompt and Done',
+    description: 'AI voice dictation that cleans up filler words. Free to start.',
+    affiliate: true,
+    rel: 'sponsored noopener noreferrer',
+  },
+  {
+    label: 'Agent-Reach',
+    href: 'https://github.com/Panniantong/Agent-Reach',
+    ariaLabel: 'Open Agent-Reach on GitHub',
+    description: 'Gives your AI agent eyes on the whole internet.',
+  },
+];

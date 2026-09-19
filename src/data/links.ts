@@ -47,4 +47,11 @@ export const tools: Tool[] = [
     description: 'Gives your AI agent eyes on the whole internet.',
     event: 'click-tool-agent-reach',
   },
+  {
+    label: 'BrowserSkill',
+    href: 'https://github.com/Tencent/BrowserSkill',
+    ariaLabel: 'Open BrowserSkill on GitHub',
+    description: "Tencent's tool: your AI agent borrows a browser tab, already logged in.",
+    event: 'click-tool-browserskill',
+  },
 ];

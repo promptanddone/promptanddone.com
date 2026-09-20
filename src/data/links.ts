@@ -54,4 +54,25 @@ export const tools: Tool[] = [
     description: "Tencent's tool: your AI agent borrows a browser tab, already logged in.",
     event: 'click-tool-browserskill',
   },
+  {
+    label: 'brag',
+    href: 'https://github.com/latent-spaces/brag',
+    ariaLabel: 'Open brag on GitHub',
+    description: 'Turn the project you just shipped into a launch video with one command.',
+    event: 'click-tool-brag',
+  },
+  {
+    label: 'security-audit-skill',
+    href: 'https://github.com/cloudflare/security-audit-skill',
+    ariaLabel: 'Open security-audit-skill on GitHub',
+    description: "Cloudflare's skill: tell your AI to audit your code — and it actually does it.",
+    event: 'click-tool-security-audit-skill',
+  },
+  {
+    label: 'HyperFrames',
+    href: 'https://github.com/heygen-com/hyperframes',
+    ariaLabel: 'Open HyperFrames on GitHub',
+    description: 'Write HTML. Render video. Built for agents.',
+    event: 'click-tool-hyperframes',
+  },
 ];

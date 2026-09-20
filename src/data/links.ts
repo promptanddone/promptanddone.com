@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'DuckDB Skills',
+    href: 'https://duckdb.org/2026/09/16/duckdb-skills.html',
+    ariaLabel: 'Open the DuckDB Skills launch post',
+    description: 'Ask your data files questions in plain English — no Python scripts.',
+    event: 'click-tool-duckdb-skills',
+  },
+  {
     label: 'Wispr Flow',
     href: 'https://ref.wisprflow.ai/promptanddone',
     ariaLabel: 'Try Wispr Flow, an affiliate link that supports Prompt and Done',

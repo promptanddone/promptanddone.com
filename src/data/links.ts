@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'OpenCut',
+    href: 'https://opencut.app',
+    ariaLabel: 'Open OpenCut — the free, open-source CapCut alternative',
+    description: 'Free, open-source CapCut clone in your browser — 4K export, auto captions, no watermark.',
+    event: 'click-tool-opencut',
+  },
+  {
     label: 'DuckDB Skills',
     href: 'https://duckdb.org/2026/09/16/duckdb-skills.html',
     ariaLabel: 'Open the DuckDB Skills launch post',

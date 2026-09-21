@@ -7,11 +7,14 @@ const target = 'https://github.com/heygen-com/hyperframes';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <meta http-equiv="refresh" content={`1;url=${target}`} />
     <title>HyperFrames — Prompt &amp; Done</title>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="bcc826ef-5592-45d9-89ac-eb7eb243acb2"></script>
     <script define:vars={{ target }}>
-      window.location.replace(target);
+      // Hold 500ms so the Umami pageview beacon fires before the redirect.
+      setTimeout(function () {
+        window.location.replace(target);
+      }, 500);
     </script>
   </head>
   <body>

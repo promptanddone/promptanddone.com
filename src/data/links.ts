@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'Orca',
+    href: 'https://onorca.dev',
+    ariaLabel: 'Open Orca — the free, open-source fleet of parallel coding agents',
+    description: 'Free, open-source — fan one prompt across a fleet of coding agents in isolated worktrees, merge the winner.',
+    event: 'click-tool-orca',
+  },
+  {
     label: 'OpenCut',
     href: 'https://opencut.app',
     ariaLabel: 'Open OpenCut — the free, open-source CapCut alternative',

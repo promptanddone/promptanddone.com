@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'Jev',
+    href: 'https://typesafe.ai',
+    ariaLabel: "Open Jev — TypeSafe's System One decision model",
+    description: 'The AI model that never writes a word — typed decisions with probabilities, in milliseconds, for fractions of a cent.',
+    event: 'click-tool-jev',
+  },
+  {
     label: 'OpenCodeReview',
     href: 'https://open-codereview.ai',
     ariaLabel: "Open OpenCodeReview — Alibaba's open-source AI code reviewer",

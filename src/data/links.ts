@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'OpenCodeReview',
+    href: 'https://open-codereview.ai',
+    ariaLabel: "Open OpenCodeReview — Alibaba's open-source AI code reviewer",
+    description: "Alibaba's internal AI code reviewer, now open source — line-level precision, 1/9 the tokens.",
+    event: 'click-tool-opencode-review',
+  },
+  {
     label: 'Orca',
     href: 'https://onorca.dev',
     ariaLabel: 'Open Orca — the free, open-source fleet of parallel coding agents',

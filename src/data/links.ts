@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'Unbagrnd',
+    href: 'https://github.com/zidniryi/unbagrnd',
+    ariaLabel: 'Open Unbagrnd on GitHub',
+    description: 'Free, open-source — removes photo backgrounds on your own device. No account, no uploads, no limits.',
+    event: 'click-tool-unbagrnd',
+  },
+  {
     label: 'Jev',
     href: 'https://typesafe.ai',
     ariaLabel: "Open Jev — TypeSafe's System One decision model",

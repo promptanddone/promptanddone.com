@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'AX',
+    href: 'https://github.com/google/ax',
+    ariaLabel: "Open AX — Google's open-source agentic orchestration runtime",
+    description: "Google's open-source Kubernetes for AI agents — declare a task in YAML, run it in an isolated sandbox.",
+    event: 'click-tool-ax',
+  },
+  {
     label: 'agent-skills',
     href: 'https://github.com/addyosmani/agent-skills',
     ariaLabel: 'Open agent-skills on GitHub — 25 production-grade engineering skills for AI coding agents',

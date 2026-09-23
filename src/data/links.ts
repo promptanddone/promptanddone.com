@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'agent-skills',
+    href: 'https://github.com/addyosmani/agent-skills',
+    ariaLabel: 'Open agent-skills on GitHub — 25 production-grade engineering skills for AI coding agents',
+    description: '25 free engineering skills that turn your AI coding agent into a senior engineer — testing, reviews, specs.',
+    event: 'click-tool-agent-skills',
+  },
+  {
     label: 'Unbagrnd',
     href: 'https://github.com/zidniryi/unbagrnd',
     ariaLabel: 'Open Unbagrnd on GitHub',

@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'Impeccable',
+    href: 'https://github.com/pbakaus/impeccable',
+    ariaLabel: 'Open Impeccable on GitHub — design guidance for AI coding agents',
+    description: 'Free, open-source design guidance for AI coding agents — 1 skill, 24 commands, 61 rules that kill ugly AI website tells.',
+    event: 'click-tool-ugly',
+  },
+  {
     label: 'video-use',
     href: 'https://github.com/browser-use/video-use',
     ariaLabel: 'Open video-use on GitHub — edit videos with your coding agent',

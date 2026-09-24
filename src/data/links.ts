@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'Claude for Financial Services',
+    href: 'https://github.com/anthropics/financial-services',
+    ariaLabel: 'Open Claude for Financial Services on GitHub — open-source finance agents',
+    description: "Anthropic's free, open-source agent pack for finance — pitch decks, DCF models, earnings reviews, and more.",
+    event: 'click-tool-finance',
+  },
+  {
     label: 'Impeccable',
     href: 'https://github.com/pbakaus/impeccable',
     ariaLabel: 'Open Impeccable on GitHub — design guidance for AI coding agents',

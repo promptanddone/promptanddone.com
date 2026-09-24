@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'video-use',
+    href: 'https://github.com/browser-use/video-use',
+    ariaLabel: 'Open video-use on GitHub — edit videos with your coding agent',
+    description: 'Free, open-source video editing by AI coding agent — drop in raw footage, it cuts, grades, captions, and self-checks the render.',
+    event: 'click-tool-videuse',
+  },
+  {
     label: 'AX',
     href: 'https://github.com/google/ax',
     ariaLabel: "Open AX — Google's open-source agentic orchestration runtime",

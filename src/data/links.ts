@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'OmniRoute',
+    href: 'https://github.com/diegosouzapw/OmniRoute',
+    ariaLabel: 'Open OmniRoute on GitHub — free open-source AI model gateway',
+    description: 'Free, open-source AI gateway — one endpoint routes you through 1,200+ models with quota-aware auto-failover and token compression that stretches every token up to 10x further.',
+    event: 'click-tool-omniroute',
+  },
+  {
     label: 'VoiceStudio',
     href: 'https://github.com/debpalash/VoiceStudio',
     ariaLabel: 'Open VoiceStudio on GitHub — free open-source AI voice cloning',

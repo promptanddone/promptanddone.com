@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: "God's Eye View",
+    href: 'https://github.com/bilawalsidhu/gods-eye-view',
+    ariaLabel: "Open God's Eye View on GitHub — free 3D spy-satellite globe",
+    description: 'Free 3D "spy satellite" in your browser — live aircraft, ships, satellites, earthquakes and public cameras on a photorealistic globe, with voice control. No API keys, no signup.',
+    event: 'click-tool-godseyeview',
+  },
+  {
     label: 'OmniRoute',
     href: 'https://github.com/diegosouzapw/OmniRoute',
     ariaLabel: 'Open OmniRoute on GitHub — free open-source AI model gateway',

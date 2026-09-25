@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'VoiceStudio',
+    href: 'https://github.com/debpalash/VoiceStudio',
+    ariaLabel: 'Open VoiceStudio on GitHub — free open-source AI voice cloning',
+    description: 'Free, open-source local ElevenLabs alternative — clone any voice from a 3-second clip, dub videos, transcribe, make audiobooks. No account, no API key.',
+    event: 'click-tool-voicestudio',
+  },
+  {
     label: 'Claude for Financial Services',
     href: 'https://github.com/anthropics/financial-services',
     ariaLabel: 'Open Claude for Financial Services on GitHub — open-source finance agents',

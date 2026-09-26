@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'AI Job Search',
+    href: 'https://github.com/MadsLorentzen/ai-job-search',
+    ariaLabel: 'Open AI Job Search on GitHub — open-source AI job-search framework',
+    description: 'Free, open-source framework that turns Claude Code into a full job-search machine — it scores postings, tailors your CV, writes cover letters, and preps you for interviews. ~44K stars, MIT.',
+    event: 'click-tool-aijobsearch',
+  },
+  {
     label: "God's Eye View",
     href: 'https://github.com/bilawalsidhu/gods-eye-view',
     ariaLabel: "Open God's Eye View on GitHub — free 3D spy-satellite globe",

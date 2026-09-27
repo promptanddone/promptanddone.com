@@ -32,6 +32,13 @@ export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boole
 
 export const tools: Tool[] = [
   {
+    label: 'AI Engineering from Scratch',
+    href: 'https://github.com/rohitg00/ai-engineering-from-scratch',
+    ariaLabel: 'Open AI Engineering from Scratch on GitHub — free AI engineering curriculum',
+    description: 'A complete AI engineering degree, free on GitHub — 523 lessons across 20 phases, from math to LLMs to agents, and every lesson ships a real artifact: a prompt, a skill, an agent, or an MCP server. ~58K stars, MIT.',
+    event: 'click-tool-aiengineering',
+  },
+  {
     label: 'AI Job Search',
     href: 'https://github.com/MadsLorentzen/ai-job-search',
     ariaLabel: 'Open AI Job Search on GitHub — open-source AI job-search framework',

@@ -27,16 +27,103 @@ import { brand, links, tools } from '../data/links';
       ))}
     </nav>
 
-    <section aria-labelledby="tools-head">
-      <h2 id="tools-head">Tools from the videos</h2>
-      {tools.map((t) => (
-        <a class="ln ln--tool" href={t.href} aria-label={t.ariaLabel} data-umami-event={t.event} target="_blank" rel={t.rel ?? 'noopener noreferrer'}>
-          <span class="lb">{t.label}</span>
-          <span class="hd">{t.description}</span>
-          {t.affiliate && <span class="aff">affiliate</span>}
-        </a>
-      ))}
+    <section class="lib" aria-labelledby="tools-head">
+      <div class="lib-head">
+        <h2 id="tools-head">From the videos</h2>
+        <span class="count" id="lib-count">{tools.length}</span>
+      </div>
+
+      <div class="lib-controls">
+        <input
+          id="lib-search"
+          type="search"
+          placeholder="Search tools, prompts, guides…"
+          aria-label="Search the library"
+          autocomplete="off"
+        />
+        <div class="chips" role="group" aria-label="Filter by type">
+          <button type="button" class="chip is-on" data-kind="all" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-kind="tool" aria-pressed="false">Tools</button>
+          <button type="button" class="chip" data-kind="prompt" aria-pressed="false">Prompt packs</button>
+          <button type="button" class="chip" data-kind="guide" aria-pressed="false">Guides</button>
+        </div>
+      </div>
+
+      <div class="cards" id="lib-cards">
+        {tools.map((t) => (
+          <a
+            class="card"
+            href={t.href}
+            data-kind={t.kind}
+            data-search={`${t.label} ${t.description}`.toLowerCase()}
+            aria-label={t.ariaLabel}
+            data-umami-event={t.event}
+            {...(t.external === false ? {} : { target: '_blank', rel: t.rel ?? 'noopener noreferrer' })}
+          >
+            <span class={`k k--${t.kind}`}>{t.kind === 'tool' ? 'Tool' : t.kind === 'prompt' ? 'Prompt pack' : 'Guide'}</span>
+            {t.affiliate && <span class="aff">affiliate</span>}
+            <span class="lb">{t.label}</span>
+            <span class="hd">{t.description}</span>
+            <span class="go" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+
+      <p class="empty" id="lib-empty" hidden>No matches — try a different search.</p>
+      <button type="button" class="more" id="lib-more" hidden></button>
     </section>
+
+    <script>
+      const cards = [...document.querySelectorAll('#lib-cards .card')];
+      const search = document.getElementById('lib-search');
+      const chips = [...document.querySelectorAll('.chip')];
+      const more = document.getElementById('lib-more');
+      const empty = document.getElementById('lib-empty');
+      const count = document.getElementById('lib-count');
+      const PAGE = 12;
+      let kind = 'all';
+      let q = '';
+      let shown = PAGE;
+
+      function apply() {
+        const vis = cards.filter(
+          (c) => (kind === 'all' || c.dataset.kind === kind) && c.dataset.search.includes(q)
+        );
+        cards.forEach((c) => { c.hidden = true; });
+        vis.slice(0, shown).forEach((c) => { c.hidden = false; });
+        empty.hidden = vis.length > 0;
+        const left = vis.length - shown;
+        more.hidden = left <= 0;
+        more.textContent = `Show more (${left} left)`;
+        count.textContent = String(vis.length);
+      }
+
+      search.addEventListener('input', () => {
+        q = search.value.trim().toLowerCase();
+        shown = PAGE;
+        apply();
+      });
+
+      chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          kind = chip.dataset.kind;
+          chips.forEach((c) => {
+            const on = c === chip;
+            c.classList.toggle('is-on', on);
+            c.setAttribute('aria-pressed', String(on));
+          });
+          shown = PAGE;
+          apply();
+        });
+      });
+
+      more.addEventListener('click', () => {
+        shown += PAGE;
+        apply();
+      });
+
+      apply();
+    </script>
 
     <footer>© {brand.year} {brand.name}</footer>
   </main>

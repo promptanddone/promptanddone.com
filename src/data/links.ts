@@ -27,16 +27,30 @@ export const links: Link[] = [
 ];
 
 
-export type Tool = Omit<Link, 'icon'> & { description: string; affiliate?: boolean };
+export type Tool = Omit<Link, 'icon'> & {
+  description: string;
+  kind: 'tool' | 'prompt' | 'guide';
+  affiliate?: boolean;
+};
 
 
 export const tools: Tool[] = [
+  {
+    label: '2 ChatGPT Prompts: 0 to 30M Views',
+    href: 'https://promptanddone.com/scripts/',
+    ariaLabel: 'Open the 2 ChatGPT prompts that turn ChatGPT into a viral strategist and script writer',
+    description: 'The exact 2 prompts from the reel — one turns ChatGPT into a viral strategist for your niche, the other writes 30 days of scripts in your voice.',
+    external: false,
+    event: 'click-tool-scripts',
+    kind: 'prompt',
+  },
   {
     label: 'AI Engineering from Scratch',
     href: 'https://github.com/rohitg00/ai-engineering-from-scratch',
     ariaLabel: 'Open AI Engineering from Scratch on GitHub — free AI engineering curriculum',
     description: 'A complete AI engineering degree, free on GitHub — 523 lessons across 20 phases, from math to LLMs to agents, and every lesson ships a real artifact: a prompt, a skill, an agent, or an MCP server. ~58K stars, MIT.',
     event: 'click-tool-aiengineering',
+    kind: 'guide',
   },
   {
     label: 'AI Job Search',
@@ -44,6 +58,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open AI Job Search on GitHub — open-source AI job-search framework',
     description: 'Free, open-source framework that turns Claude Code into a full job-search machine — it scores postings, tailors your CV, writes cover letters, and preps you for interviews. ~44K stars, MIT.',
     event: 'click-tool-aijobsearch',
+    kind: 'tool',
   },
   {
     label: "God's Eye View",
@@ -51,6 +66,7 @@ export const tools: Tool[] = [
     ariaLabel: "Open God's Eye View on GitHub — free 3D spy-satellite globe",
     description: 'Free 3D "spy satellite" in your browser — live aircraft, ships, satellites, earthquakes and public cameras on a photorealistic globe, with voice control. No API keys, no signup.',
     event: 'click-tool-godseyeview',
+    kind: 'tool',
   },
   {
     label: 'OmniRoute',
@@ -58,6 +74,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open OmniRoute on GitHub — free open-source AI model gateway',
     description: 'Free, open-source AI gateway — one endpoint routes you through 1,200+ models with quota-aware auto-failover and token compression that stretches every token up to 10x further.',
     event: 'click-tool-omniroute',
+    kind: 'tool',
   },
   {
     label: 'VoiceStudio',
@@ -65,6 +82,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open VoiceStudio on GitHub — free open-source AI voice cloning',
     description: 'Free, open-source local ElevenLabs alternative — clone any voice from a 3-second clip, dub videos, transcribe, make audiobooks. No account, no API key.',
     event: 'click-tool-voicestudio',
+    kind: 'tool',
   },
   {
     label: 'Claude for Financial Services',
@@ -72,6 +90,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open Claude for Financial Services on GitHub — open-source finance agents',
     description: "Anthropic's free, open-source agent pack for finance — pitch decks, DCF models, earnings reviews, and more.",
     event: 'click-tool-finance',
+    kind: 'tool',
   },
   {
     label: 'Impeccable',
@@ -79,6 +98,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open Impeccable on GitHub — design guidance for AI coding agents',
     description: 'Free, open-source design guidance for AI coding agents — 1 skill, 24 commands, 61 rules that kill ugly AI website tells.',
     event: 'click-tool-ugly',
+    kind: 'tool',
   },
   {
     label: 'video-use',
@@ -86,6 +106,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open video-use on GitHub — edit videos with your coding agent',
     description: 'Free, open-source video editing by AI coding agent — drop in raw footage, it cuts, grades, captions, and self-checks the render.',
     event: 'click-tool-videuse',
+    kind: 'tool',
   },
   {
     label: 'AX',
@@ -93,6 +114,7 @@ export const tools: Tool[] = [
     ariaLabel: "Open AX — Google's open-source agentic orchestration runtime",
     description: "Google's open-source Kubernetes for AI agents — declare a task in YAML, run it in an isolated sandbox.",
     event: 'click-tool-ax',
+    kind: 'tool',
   },
   {
     label: 'agent-skills',
@@ -100,6 +122,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open agent-skills on GitHub — 25 production-grade engineering skills for AI coding agents',
     description: '25 free engineering skills that turn your AI coding agent into a senior engineer — testing, reviews, specs.',
     event: 'click-tool-agent-skills',
+    kind: 'tool',
   },
   {
     label: 'Unbagrnd',
@@ -107,6 +130,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open Unbagrnd on GitHub',
     description: 'Free, open-source — removes photo backgrounds on your own device. No account, no uploads, no limits.',
     event: 'click-tool-unbagrnd',
+    kind: 'tool',
   },
   {
     label: 'Jev',
@@ -114,6 +138,7 @@ export const tools: Tool[] = [
     ariaLabel: "Open Jev — TypeSafe's System One decision model",
     description: 'The AI model that never writes a word — typed decisions with probabilities, in milliseconds, for fractions of a cent.',
     event: 'click-tool-jev',
+    kind: 'tool',
   },
   {
     label: 'OpenCodeReview',
@@ -121,6 +146,7 @@ export const tools: Tool[] = [
     ariaLabel: "Open OpenCodeReview — Alibaba's open-source AI code reviewer",
     description: "Alibaba's internal AI code reviewer, now open source — line-level precision, 1/9 the tokens.",
     event: 'click-tool-opencode-review',
+    kind: 'tool',
   },
   {
     label: 'Orca',
@@ -128,6 +154,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open Orca — the free, open-source fleet of parallel coding agents',
     description: 'Free, open-source — fan one prompt across a fleet of coding agents in isolated worktrees, merge the winner.',
     event: 'click-tool-orca',
+    kind: 'tool',
   },
   {
     label: 'OpenCut',
@@ -135,6 +162,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open OpenCut — the free, open-source CapCut alternative',
     description: 'Free, open-source CapCut clone in your browser — 4K export, auto captions, no watermark.',
     event: 'click-tool-opencut',
+    kind: 'tool',
   },
   {
     label: 'DuckDB Skills',
@@ -142,6 +170,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open the DuckDB Skills launch post',
     description: 'Ask your data files questions in plain English — no Python scripts.',
     event: 'click-tool-duckdb-skills',
+    kind: 'tool',
   },
   {
     label: 'Wispr Flow',
@@ -151,6 +180,7 @@ export const tools: Tool[] = [
     affiliate: true,
     rel: 'sponsored noopener noreferrer',
     event: 'click-tool-wispr-flow',
+    kind: 'tool',
   },
   {
     label: 'Agent-Reach',
@@ -158,6 +188,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open Agent-Reach on GitHub',
     description: 'Gives your AI agent eyes on the whole internet.',
     event: 'click-tool-agent-reach',
+    kind: 'tool',
   },
   {
     label: 'BrowserSkill',
@@ -165,6 +196,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open BrowserSkill on GitHub',
     description: "Tencent's tool: your AI agent borrows a browser tab, already logged in.",
     event: 'click-tool-browserskill',
+    kind: 'tool',
   },
   {
     label: 'brag',
@@ -172,6 +204,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open brag on GitHub',
     description: 'Turn the project you just shipped into a launch video with one command.',
     event: 'click-tool-brag',
+    kind: 'tool',
   },
   {
     label: 'security-audit-skill',
@@ -179,6 +212,7 @@ export const tools: Tool[] = [
     ariaLabel: 'Open security-audit-skill on GitHub',
     description: "Cloudflare's skill: tell your AI to audit your code — and it actually does it.",
     event: 'click-tool-security-audit-skill',
+    kind: 'tool',
   },
   {
     label: 'HyperFrames',
@@ -186,5 +220,6 @@ export const tools: Tool[] = [
     ariaLabel: 'Open HyperFrames on GitHub',
     description: 'Write HTML. Render video. Built for agents.',
     event: 'click-tool-hyperframes',
+    kind: 'tool',
   },
 ];

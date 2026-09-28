@@ -1,0 +1,152 @@
+---
+// promptanddone.com/scripts — the SCRIPTS prompt pack (DM deliverable).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const prompt1 = `Act as a viral content strategist who studies short-form video for a living.
+
+Analyze the top 20 performing short-form videos in the [NICHE] niche from the last 90 days. For each video, break down:
+
+1. The exact hook — quote the first 3 seconds word for word
+2. The format and structure (talking head, listicle, demo, storytime, etc.)
+3. The core theme or promise (what the viewer gets)
+4. Why it likely retained viewers past the first 3 seconds
+
+Then summarize: the 5 most repeated hook patterns (quote real examples), the 3 highest-performing formats, and the themes with the strongest engagement. Be specific — quote real hook lines, never generalize.`;
+
+const prompt2 = `Using the hook patterns, formats, and themes from your analysis above, write 30 days of short-form video scripts for my [NICHE] account, in my voice: [VOICE — e.g. direct, zero fluff, dry humor].
+
+Rules for every script:
+- Opens with a scroll-stopping hook (under 8 words)
+- 20–30 seconds spoken, conversational — written to be said out loud
+- Ends with a comment-driven CTA (a question, not "link in bio")
+
+Deliver it as a posting calendar: Day 1 through Day 30, one script per day, each labeled with the hook pattern it uses. Make every hook feel like breaking news, not a pitch.`;
+---
+<BaseLayout title="2 ChatGPT Prompts: 0 to 30M Views System — Prompt & Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · SCRIPTS pack</p>
+      <h1>2 ChatGPT Prompts:<br />0 to 30M Views System</h1>
+      <p class="tag">Paste them in order, fill in your niche, get 30 days of scripts in your voice.</p>
+    </header>
+
+    <section class="card" aria-labelledby="p1">
+      <h2 id="p1"><span class="n">1</span> The Niche Decoder</h2>
+      <p class="sub">Teardown the top 20 videos in your niche — hooks, formats, themes.</p>
+      <div class="prompt" data-copy-target="prompt1">{prompt1}</div>
+      <button class="copy" data-copy="prompt1" type="button">Copy prompt</button>
+    </section>
+
+    <section class="card" aria-labelledby="p2">
+      <h2 id="p2"><span class="n">2</span> The 30-Day Script Engine</h2>
+      <p class="sub">Turn that analysis into 30 days of scripts + a posting calendar.</p>
+      <div class="prompt" data-copy-target="prompt2">{prompt2}</div>
+      <button class="copy" data-copy="prompt2" type="button">Copy prompt</button>
+    </section>
+
+    <section class="card how" aria-labelledby="how">
+      <h2 id="how">How to use them</h2>
+      <ol>
+        <li>Paste <strong>Prompt 1</strong> into ChatGPT (or Claude/Gemini), fill in your niche.</li>
+        <li>Read the analysis — steal the 5 hook patterns for your niche.</li>
+        <li>Paste <strong>Prompt 2</strong> in the <strong>same chat</strong>, fill in your voice. It builds on the analysis.</li>
+        <li>Film one script a day for 30 days. Don't edit the hooks — they're the point.</li>
+      </ol>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<script define:vars={{ prompt1, prompt2 }}>
+  const packs = { prompt1, prompt2 };
+  document.querySelectorAll('.copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const key = btn.getAttribute('data-copy');
+      try {
+        await navigator.clipboard.writeText(packs[key]);
+        btn.textContent = 'Copied ✓';
+      } catch (e) {
+        btn.textContent = 'Copy failed — select manually';
+      }
+      setTimeout(() => { btn.textContent = 'Copy prompt'; }, 2000);
+    });
+  });
+</script>
+
+<style>
+  main {
+    width: min(100% - 2.25rem, 44rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
+  }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 8.5vw, 3.25rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    white-space: normal;
+  }
+  .tag { margin: 1rem 0 0; font-size: 1rem; line-height: 1.5; color: var(--soft); }
+  .card {
+    margin-top: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    padding: 1.4rem 1.35rem;
+    background: #101011;
+  }
+  .card h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: -.01em;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+  }
+  .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #191100;
+    font-size: 1.05rem;
+    flex: none;
+  }
+  .sub { margin: .6rem 0 0; color: var(--soft); font-size: .95rem; }
+  .prompt {
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: 1rem 1.1rem;
+    overflow-wrap: anywhere;
+  }
+  .copy {
+    margin-top: .9rem;
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #191100;
+    background: var(--accent);
+    border: none;
+    border-radius: .6rem;
+    padding: .7rem 1.3rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .how ol { margin: .8rem 0 0; padding-left: 1.3rem; line-height: 1.7; color: var(--ink); }
+  .how li { margin-bottom: .5rem; }
+  footer { margin-top: 2.5rem; color: var(--soft); font-size: .85rem; }
+</style>

@@ -74,12 +74,12 @@ import { brand, links, tools } from '../data/links';
     </section>
 
     <script>
-      const cards = [...document.querySelectorAll('#lib-cards .card')];
-      const search = document.getElementById('lib-search');
-      const chips = [...document.querySelectorAll('.chip')];
-      const more = document.getElementById('lib-more');
-      const empty = document.getElementById('lib-empty');
-      const count = document.getElementById('lib-count');
+      const cards = [...document.querySelectorAll<HTMLAnchorElement>('#lib-cards .card')];
+      const search = document.getElementById('lib-search') as HTMLInputElement;
+      const chips = [...document.querySelectorAll<HTMLButtonElement>('.chip')];
+      const more = document.getElementById('lib-more') as HTMLButtonElement;
+      const empty = document.getElementById('lib-empty') as HTMLParagraphElement;
+      const count = document.getElementById('lib-count') as HTMLSpanElement;
       const PAGE = 12;
       let kind = 'all';
       let q = '';

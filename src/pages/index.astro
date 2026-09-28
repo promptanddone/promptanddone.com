@@ -87,7 +87,7 @@ import { brand, links, tools } from '../data/links';
 
       function apply() {
         const vis = cards.filter(
-          (c) => (kind === 'all' || c.dataset.kind === kind) && c.dataset.search.includes(q)
+          (c) => (kind === 'all' || c.dataset.kind === kind) && (c.dataset.search ?? '').includes(q)
         );
         cards.forEach((c) => { c.hidden = true; });
         vis.slice(0, shown).forEach((c) => { c.hidden = false; });
@@ -106,7 +106,7 @@ import { brand, links, tools } from '../data/links';
 
       chips.forEach((chip) => {
         chip.addEventListener('click', () => {
-          kind = chip.dataset.kind;
+          kind = chip.dataset.kind ?? 'all';
           chips.forEach((c) => {
             const on = c === chip;
             c.classList.toggle('is-on', on);

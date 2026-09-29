@@ -36,6 +36,14 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: 'OpenAI Dots',
+    href: 'https://openai.com/index/introducing-dots/',
+    ariaLabel: 'Open the OpenAI Dots announcement — always-on AI agents',
+    description: "OpenAI's always-on AI agents — give yours a goal and it works across 4,000+ apps with its own computer and browser, asking your approval before anything big.",
+    event: 'click-tool-dots',
+    kind: 'tool',
+  },
+  {
     label: '2 ChatGPT Prompts: 0 to 30M Views',
     href: 'https://promptanddone.com/scripts/',
     ariaLabel: 'Open the 2 ChatGPT prompts that turn ChatGPT into a viral strategist and script writer',

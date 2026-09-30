@@ -36,6 +36,15 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: '10 AI Tools for Job Seekers',
+    href: 'https://promptanddone.com/jobseekers/',
+    ariaLabel: 'Open the 10 AI tools for job seekers toolkit — resume, ATS, interviews, salary',
+    description: 'The full toolkit from the reel — ChatGPT, Claude, Teal, Jobscan, LinkedIn, Canva, Grammarly, Huntr, Levels.fyi, and Final Round AI, each linking to its official site.',
+    external: false,
+    event: 'click-tool-jobseekers',
+    kind: 'tool',
+  },
+  {
     label: 'OpenAI Dots',
     href: 'https://openai.com/index/introducing-dots/',
     ariaLabel: 'Open the OpenAI Dots announcement — always-on AI agents',

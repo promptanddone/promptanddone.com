@@ -239,4 +239,13 @@ export const tools: Tool[] = [
     event: 'click-tool-hyperframes',
     kind: 'tool',
   },
+  {
+    label: 'Muse Gadgets SDK',
+    href: 'https://promptanddone.com/go/muse-gadgets/',
+    ariaLabel: "Open the Muse Gadgets SDK on GitHub — Meta's open SDK for building Muse hardware",
+    description: "Meta's open SDK for building your own Muse gadgets — ESP32 and Linux firmware, Apache 2.0. Grab an API token, point your coding agent at it, build screens, buttons, sensors.",
+    external: false,
+    event: 'click-tool-muse-gadgets',
+    kind: 'tool',
+  },
 ];

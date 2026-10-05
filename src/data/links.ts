@@ -248,4 +248,13 @@ export const tools: Tool[] = [
     event: 'click-tool-muse-gadgets',
     kind: 'tool',
   },
+  {
+    label: 'Claude Code Mods',
+    href: 'https://promptanddone.com/go/mods/',
+    ariaLabel: 'Open the Claude Code Mods README on GitHub — tiny TypeScript add-ons that plug into the agent',
+    description: 'Tiny TypeScript add-ons that plug straight into Claude Code — rewrite what it says, block what it does, even redraw the screen. Four ship built in: diff view, security guard, usage stats, project instructions.',
+    external: false,
+    event: 'click-tool-mods',
+    kind: 'tool',
+  },
 ];

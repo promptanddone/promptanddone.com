@@ -1,0 +1,57 @@
+---
+// promptanddone.com/privacy — Privacy Policy for Dispatch AI (private local tool).
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Privacy Policy — Dispatch AI">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · Dispatch AI</p>
+      <h1>Privacy Policy</h1>
+      <p class="tag">Last updated: October 6, 2026</p>
+    </header>
+
+    <section>
+      <h2>Local-first by design</h2>
+      <p>Dispatch AI runs entirely on the owner's own computer. There is no user account system, no analytics, no tracking, and no advertising in the app.</p>
+    </section>
+
+    <section>
+      <h2>What leaves your computer</h2>
+      <p>The only data transmitted outside the local machine is what you choose to publish: video files and captions you submit are sent to TikTok's API solely to post them to your own TikTok account, using OAuth tokens you authorized. Nothing else is uploaded anywhere.</p>
+    </section>
+
+    <section>
+      <h2>What stays on your computer</h2>
+      <p>OAuth tokens and app credentials are stored locally on the owner's machine, encrypted by the operating system's credential storage. They are never shared with third parties.</p>
+    </section>
+
+    <section>
+      <h2>Data retention</h2>
+      <p>Published videos remain subject to TikTok's own privacy policy once posted. Local copies and tokens can be deleted at any time by removing the app's local data directory.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Questions about this policy: <a href="mailto:latentwireai@gmail.com">latentwireai@gmail.com</a></p>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    width: min(100% - 2.25rem, 44rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
+  }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 { margin: 0 0 .5rem; font-size: clamp(1.9rem, 8.5vw, 3rem); }
+  .tag { color: var(--soft); margin: 0 0 2rem; }
+  section { margin: 0 0 1.75rem; }
+  h2 { font-size: 1.15rem; margin: 0 0 .5rem; }
+  p { line-height: 1.65; color: var(--ink); margin: 0; }
+  p a { color: var(--accent); }
+  footer { margin-top: 3rem; color: var(--soft); font-size: .85rem; }
+</style>

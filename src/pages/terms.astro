@@ -1,0 +1,57 @@
+---
+// promptanddone.com/terms — Terms of Service for Dispatch AI (private local tool).
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Terms of Service — Dispatch AI">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · Dispatch AI</p>
+      <h1>Terms of Service</h1>
+      <p class="tag">Last updated: October 6, 2026</p>
+    </header>
+
+    <section>
+      <h2>What Dispatch AI is</h2>
+      <p>Dispatch AI is a private, local-only application that helps its owner publish short videos to their own TikTok account. It is not offered as a public service.</p>
+    </section>
+
+    <section>
+      <h2>Use of the app</h2>
+      <p>The app runs entirely on the owner's own computer. Publishing happens through TikTok's official API using the owner's own TikTok developer credentials and TikTok account.</p>
+    </section>
+
+    <section>
+      <h2>Your responsibility</h2>
+      <p>You are responsible for the content you publish through the app, including complying with TikTok's Terms of Service and Community Guidelines, and with all applicable laws.</p>
+    </section>
+
+    <section>
+      <h2>Provided as-is</h2>
+      <p>Dispatch AI is provided "as is", without warranties of any kind. The owner accepts no liability for failed uploads, rejected content, or API changes on TikTok's side.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Questions about these terms: <a href="mailto:latentwireai@gmail.com">latentwireai@gmail.com</a></p>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    width: min(100% - 2.25rem, 44rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
+  }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 { margin: 0 0 .5rem; font-size: clamp(1.9rem, 8.5vw, 3rem); }
+  .tag { color: var(--soft); margin: 0 0 2rem; }
+  section { margin: 0 0 1.75rem; }
+  h2 { font-size: 1.15rem; margin: 0 0 .5rem; }
+  p { line-height: 1.65; color: var(--ink); margin: 0; }
+  p a { color: var(--accent); }
+  footer { margin-top: 3rem; color: var(--soft); font-size: .85rem; }
+</style>

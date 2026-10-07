@@ -257,4 +257,13 @@ export const tools: Tool[] = [
     event: 'click-tool-mods',
     kind: 'tool',
   },
+  {
+    label: 'Procedural Isometric Worlds',
+    href: 'https://promptanddone.com/go/worlds/',
+    ariaLabel: 'Open the Procedural Isometric Worlds skill on GitHub — generate 3D worlds from code',
+    description: 'A skill that generates entire miniature 3D worlds from code — a rocket launch with exhaust shaders and pooled smoke, a waving robot, even a garden center. No Blender, no modeling skills: describe what you want, get a world.',
+    external: false,
+    event: 'click-tool-worlds',
+    kind: 'tool',
+  },
 ];

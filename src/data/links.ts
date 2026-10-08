@@ -266,4 +266,13 @@ export const tools: Tool[] = [
     event: 'click-tool-worlds',
     kind: 'tool',
   },
+  {
+    label: 'Beam',
+    href: 'https://promptanddone.com/go/beam/',
+    ariaLabel: "Join the Beam waitlist — Reflection AI's 501B open-weight model",
+    description: "Reflection AI's 501B open-weight model — only 23B parameters fire per token, with a 1M-token context. Join the waitlist for early access.",
+    external: false,
+    event: 'click-tool-beam',
+    kind: 'tool',
+  },
 ];

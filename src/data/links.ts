@@ -37,7 +37,7 @@ export type Tool = Omit<Link, 'icon'> & {
 export const tools: Tool[] = [
   {
     label: 'The Long-Chat Reset',
-    href: 'https://promptanddone.com/reset/',
+    href: 'https://promptanddone.com/go/reset',
     ariaLabel: 'Open the Long-Chat Reset — the handoff-note prompt that stops long AI chats burning your limit',
     description: 'The handoff-note prompt from the reel: pack a long chat into one note, open a fresh chat, and keep going. Plus Anthropic\'s own tips for making your usage last longer.',
     external: false,

@@ -275,4 +275,13 @@ export const tools: Tool[] = [
     event: 'click-tool-beam',
     kind: 'tool',
   },
+  {
+    label: 'REA',
+    href: 'https://promptanddone.com/go/reverse/',
+    ariaLabel: 'Open REA on GitHub — reverse engineer anything with agents',
+    description: 'MCP server that turns your coding agent into a reverse engineer — point it at any app, no source code needed.',
+    external: false,
+    event: 'click-tool-rea',
+    kind: 'tool',
+  },
 ];

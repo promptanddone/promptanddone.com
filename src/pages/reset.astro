@@ -1,0 +1,143 @@
+---
+// promptanddone.com/reset — the RESET pack (DM deliverable for the "AI limit" reel).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const handoff = `We're continuing this in a new chat. Write a handoff note I can paste there so you can pick up where we left off.
+
+Include:
+1. Goal: what I'm trying to get done
+2. Decisions: what we settled on, and why
+3. Key facts: names, numbers, constraints, links, code or exact wording I'll need again
+4. Done and next: what's finished, and the next steps
+5. My preferences: tone, format, things to avoid
+
+Rules: bullet points, under 200 words, only things we actually discussed. Don't invent anything. End with "Continue from here."`;
+---
+<BaseLayout title="The Long-Chat Reset — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · RESET pack</p>
+      <h1>The Long-Chat Reset</h1>
+      <p class="tag">Your AI re-processes the whole chat every time you hit send. One prompt packs it into a note so you can start fresh without starting over.</p>
+    </header>
+
+    <section class="card" aria-labelledby="p1">
+      <h2 id="p1"><span class="n">1</span> The handoff-note prompt</h2>
+      <p class="sub">Paste it into the long chat. Copy the note into a new chat.</p>
+      <div class="prompt">{handoff}</div>
+      <button class="copy" type="button">Copy prompt</button>
+    </section>
+
+    <section class="card how" aria-labelledby="how">
+      <h2 id="how"><span class="n">2</span> How to reset</h2>
+      <ol>
+        <li>Run the handoff-note prompt in the old chat.</li>
+        <li>Read the note and fix anything it got wrong or left out.</li>
+        <li>Open a new chat, paste the note, then ask your next question.</li>
+      </ol>
+      <p class="sub">Reset when you switch tasks, when answers start missing earlier details, or when you're close to your limit. The note is a summary: check it before you continue.</p>
+    </section>
+
+    <section class="card how" aria-labelledby="tips">
+      <h2 id="tips"><span class="n">3</span> Make your usage go further</h2>
+      <p class="sub">From <a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">Claude's help page on usage limits</a>:</p>
+      <ul>
+        <li>Start a new conversation when a long chat is close to your limit.</li>
+        <li>Put reference material in a Project: projects use retrieval, so only the relevant parts are loaded.</li>
+        <li>Turn off extended thinking when the task doesn't need it.</li>
+        <li>Pick a lower effort level for routine tasks; higher effort uses more tokens.</li>
+        <li>Turn off tools and connectors you aren't using; they are token-intensive.</li>
+      </ul>
+      <p class="sub">Why answers slip in long chats: <a href="https://trychroma.com/research/context-rot">Chroma tested 18 models</a> and found performance degrades as input grows.</p>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<script define:vars={{ handoff }}>
+  const btn = document.querySelector('.copy');
+  btn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(handoff); btn.textContent = 'Copied ✓'; }
+    catch (e) { btn.textContent = 'Copy failed — select manually'; }
+    setTimeout(() => { btn.textContent = 'Copy prompt'; }, 2000);
+  });
+</script>
+
+<style>
+  main {
+    width: min(100% - 2.25rem, 44rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
+  }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 8.5vw, 3.25rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    white-space: normal;
+  }
+  .tag { margin: 1rem 0 0; font-size: 1rem; line-height: 1.5; color: var(--soft); }
+  .card {
+    margin-top: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    padding: 1.4rem 1.35rem;
+    background: #101011;
+  }
+  .card h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: -.01em;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+  }
+  .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #191100;
+    font-size: 1.05rem;
+    flex: none;
+  }
+  .sub { margin: .6rem 0 0; color: var(--soft); font-size: .95rem; }
+  .prompt {
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: 1rem 1.1rem;
+    overflow-wrap: anywhere;
+  }
+  .copy {
+    margin-top: .9rem;
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #191100;
+    background: var(--accent);
+    border: none;
+    border-radius: .6rem;
+    padding: .7rem 1.3rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .how ol, .how ul { margin: .8rem 0 0; padding-left: 1.3rem; line-height: 1.7; color: var(--ink); }
+  .how li { margin-bottom: .5rem; }
+  .sub a { color: var(--accent); }
+  footer { margin-top: 2.5rem; color: var(--soft); font-size: .85rem; }
+</style>

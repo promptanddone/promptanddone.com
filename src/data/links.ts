@@ -36,15 +36,6 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
-    label: 'The Small AI Engineering Setup',
-    href: 'https://promptanddone.com/go/harness',
-    ariaLabel: 'Open the HARNESS starter setup checklist and download the sample bug demo',
-    description: 'One harness, a few skills, focused MCP connections and optional delegation. Includes the reproducible revenue bug, task prompt and skill template from the reel.',
-    external: false,
-    event: 'click-tool-harness',
-    kind: 'guide',
-  },
-  {
     label: 'The Long-Chat Reset',
     href: 'https://promptanddone.com/go/reset',
     ariaLabel: 'Open the Long-Chat Reset — the handoff-note prompt that stops long AI chats burning your limit',

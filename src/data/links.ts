@@ -36,6 +36,15 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: 'The FLAPPY pack',
+    href: 'https://promptanddone.com/go/flappy',
+    ariaLabel: 'Open the FLAPPY pack — play the Flappy Bird games Claude, GPT and a free local AI built from the same prompt',
+    description: 'All three games from the reel (Claude Opus 5.5, GPT-6.1 Sol and free Qwen 3.5 on a laptop), the exact one-line prompt, and all three rounds.',
+    external: false,
+    event: 'click-tool-flappy',
+    kind: 'prompt',
+  },
+  {
     label: 'The ARCADE pack',
     href: 'https://promptanddone.com/go/arcade',
     ariaLabel: 'Open the ARCADE pack — play the games Claude Haiku 5.5 and Opus 5.5 built from the same prompt',

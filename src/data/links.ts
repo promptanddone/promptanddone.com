@@ -36,6 +36,15 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: 'The ARCADE pack',
+    href: 'https://promptanddone.com/go/arcade',
+    ariaLabel: 'Open the ARCADE pack — play the games Claude Haiku 5.5 and Opus 5.5 built from the same prompt',
+    description: 'Both games from the reel (Haiku 5.5\'s 3¢ one and Opus 5.5\'s 39¢ one), the exact one-line prompt, and all three race results.',
+    external: false,
+    event: 'click-tool-arcade',
+    kind: 'prompt',
+  },
+  {
     label: 'The Long-Chat Reset',
     href: 'https://promptanddone.com/go/reset',
     ariaLabel: 'Open the Long-Chat Reset — the handoff-note prompt that stops long AI chats burning your limit',

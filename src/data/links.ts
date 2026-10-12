@@ -36,6 +36,15 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: 'The RELINK pack',
+    href: 'https://promptanddone.com/go/relink',
+    ariaLabel: 'Open the RELINK pack — the two open-source projects teaching PCs to run PS5 games',
+    description: 'KytyPS5 and AnyPS5 (free, open source), the GTA V and Astro Bot sources from the reel, and our count of AnyPS5 commits that credit Claude.',
+    external: false,
+    event: 'click-tool-relink',
+    kind: 'tool',
+  },
+  {
     label: 'The FLAPPY pack',
     href: 'https://promptanddone.com/go/flappy',
     ariaLabel: 'Open the FLAPPY pack — play the Flappy Bird games Claude, GPT and a free local AI built from the same prompt',

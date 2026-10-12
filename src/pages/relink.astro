@@ -1,0 +1,154 @@
+---
+// promptanddone.com/relink — the RELINK pack (DM deliverable for the "You might play GTA 6 on a PC before it comes out on PC" reel).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const count = [
+  ['Commits on main (since 3 Aug 2026)', '5,273', '1,334'],
+  ['Crediting Claude as co-author', '1,339 (25.4%)', '—'],
+  ['Crediting any AI co-author', '1,354 (25.7%)', '22 (1.6%)'],
+  ['October pace (1–11 Oct)', '4,326 commits (≈390/day)', ''],
+];
+---
+<BaseLayout title="The RELINK pack — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · RELINK pack</p>
+      <h1>PS5 games on a PC: the two projects</h1>
+      <p class="tag">Both are free and open source (GPL-2.0). Neither includes any games, firmware or keys: they run games you own, dumped from your own console.</p>
+    </header>
+
+    <section class="card" aria-labelledby="p1">
+      <h2 id="p1"><span class="n">1</span> The two projects</h2>
+      <div class="games">
+        <a class="game" href="https://github.com/KytyPS5/KytyPS5" target="_blank" rel="noopener" data-umami-event="relink-kyty">
+          <strong>KytyPS5</strong>
+          <span>A translation layer: it translates what the game asks the PS5 for while the game runs. Windows and Linux (macOS experimental). Contributors are working on GTA V's PS5 version right now.</span>
+        </a>
+        <a class="game" href="https://github.com/boykopovar/AnyPS5" target="_blank" rel="noopener" data-umami-event="relink-anyps5">
+          <strong>AnyPS5</strong>
+          <span>A porting tool: a relinker turns the game's executable into a normal Linux or Windows program, with PC versions of the PS5 system libraries and a shader recompiler. No emulator.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card how" aria-labelledby="p2">
+      <h2 id="p2"><span class="n">2</span> What the reel showed</h2>
+      <ul>
+        <li><strong>GTA V (PS5 version) on a PC:</strong> a contributor screenshot from <a href="https://github.com/KytyPS5/KytyPS5/pull/1245">KytyPS5 pull request #1245</a> (8 Oct 2026, work in progress; the floating tree is the bug it fixes). Ray tracing: <a href="https://github.com/KytyPS5/KytyPS5/pull/1258">pull request #1258</a>.</li>
+        <li><strong>Astro Bot on Linux:</strong> a contributor's recording through AnyPS5 (<a href="https://www.youtube.com/watch?v=62wl_LddNnQ">YouTube, 2 Oct 2026</a>, early work in progress).</li>
+        <li><strong>GTA 6:</strong> 19 Nov 2026 on PS5 and Xbox Series X|S. No PC version announced (checked 12 Oct 2026).</li>
+      </ul>
+    </section>
+
+    <section class="card how" aria-labelledby="p3">
+      <h2 id="p3"><span class="n">3</span> Our commit count</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>AnyPS5</th><th>KytyPS5</th></tr></thead>
+          <tbody>
+            {count.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p class="sub">Every commit on the default branch via the GitHub API, 11 Oct 2026. A commit counts when its message has a Co-Authored-By trailer naming Claude (or another AI) or a Claude Code session link. Trailers mark AI-assisted commits; they don't measure how much of the code AI wrote. The repo owner's own commits carry none.</p>
+    </section>
+
+    <section class="card how" aria-labelledby="p4">
+      <h2 id="p4"><span class="n">4</span> The catch</h2>
+      <p class="sub">Compatibility is early. AnyPS5's official list has one commercial game playable; each new game needs its own fixes (GTA V alone has 29 KytyPS5 issues and pull requests). Don't expect GTA 6 on day one.</p>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    width: min(100% - 2.25rem, 44rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
+  }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 8.5vw, 3.25rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    white-space: normal;
+  }
+  .tag { margin: 1rem 0 0; font-size: 1rem; line-height: 1.5; color: var(--soft); }
+  .card {
+    margin-top: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    padding: 1.4rem 1.35rem;
+    background: #101011;
+  }
+  .card h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: -.01em;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+  }
+  .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #191100;
+    font-size: 1.05rem;
+    flex: none;
+  }
+  .sub { margin: .6rem 0 0; color: var(--soft); font-size: .95rem; }
+  .prompt {
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: 1rem 1.1rem;
+    overflow-wrap: anywhere;
+  }
+  .copy {
+    margin-top: .9rem;
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #191100;
+    background: var(--accent);
+    border: none;
+    border-radius: .6rem;
+    padding: .7rem 1.3rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .how ol, .how ul { margin: .8rem 0 0; padding-left: 1.3rem; line-height: 1.7; color: var(--ink); }
+  .how li { margin-bottom: .5rem; }
+  .sub a { color: var(--accent); }
+  footer { margin-top: 2.5rem; color: var(--soft); font-size: .85rem; }
+  .games { display: grid; grid-template-columns: 1fr; gap: .75rem; margin-top: 1rem; }
+  .game {
+    display: flex; flex-direction: column; gap: .3rem;
+    padding: 1rem; border-radius: .8rem; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); text-decoration: none;
+  }
+  .game strong { font-size: 1.05rem; }
+  .game span { color: var(--soft); font-size: .9rem; }
+  .game:hover, .game:focus-visible { border-color: var(--accent); }
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--soft); font-weight: 600; }
+</style>

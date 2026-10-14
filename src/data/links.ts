@@ -38,8 +38,8 @@ export const tools: Tool[] = [
   {
     label: 'The PROMPT: Claude built this video',
     href: 'https://promptanddone.com/go/builtwithcode',
-    ariaLabel: 'Open the exact prompt behind the reel Claude built entirely with code',
-    description: 'The exact prompt that started our 60-second Three.js film, word for word, plus what happened after it (three review rounds) and the tool stack.',
+    ariaLabel: 'Open the prompt behind the reel Claude built entirely with code',
+    description: 'The prompt to start your own 60-second 3D video built entirely in code with Claude and Three.js.',
     external: false,
     event: 'click-tool-builtwithcode',
     kind: 'prompt',

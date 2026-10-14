@@ -1,41 +1,28 @@
 ---
-// promptanddone.com/builtwithcode — the PROMPT deliverable for the "Claude built this video with code" reel.
+// promptanddone.com/builtwithcode — the PROMPT deliverable (starter prompt) for the "Claude built this video with code" reel.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import prompt from '../data/builtwithcode-prompt.md?raw';
 ---
-<BaseLayout title="The Exact Prompt: Claude Built This Video With Code — Prompt & Done">
+<BaseLayout title="The Prompt: Claude Built This Video With Code — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · PROMPT</p>
-      <h1>The exact prompt:<br />Claude built this video with code</h1>
-      <p class="tag">Every frame of the reel (the camera, the character, the island, the light, every camera move) is TypeScript + Three.js, rendered frame by frame. Here's the prompt that started it, word for word.</p>
+      <h1>The prompt:<br />Claude built this video with code</h1>
+      <p class="tag">Every frame of the reel is TypeScript + Three.js, rendered frame by frame. Here's the prompt to start your own.</p>
     </header>
 
     <section class="card" aria-labelledby="p1">
       <h2 id="p1"><span class="n">1</span> The prompt</h2>
-      <p class="sub">Paste it into Claude Code in an empty folder. It's long on purpose: it sets the bar for quality, motion and checking its own work.</p>
-      <button class="copy" data-copy="prompt" type="button">Copy prompt</button>
-      <a class="dl" href="/builtwithcode/prompt.md" download>Download .md</a>
+      <p class="sub">Paste it into Claude Code in an empty folder.</p>
       <div class="prompt">{prompt}</div>
+      <button class="copy" data-copy="prompt" type="button">Copy prompt</button>
     </section>
 
-    <section class="card how" aria-labelledby="how">
-      <h2 id="how">What happened after the prompt</h2>
+    <section class="card how" aria-labelledby="tips">
+      <h2 id="tips">Tips</h2>
       <ul>
-        <li><strong>One prompt started it — it wasn't one-shot.</strong> Claude Code (Claude Opus 5.5) wrote the code, rendered frames, looked at them and fixed what it saw, in one long session.</li>
-        <li><strong>Three independent review rounds.</strong> A fresh Claude reviewer judged each render; it failed rounds 1 and 2 and passed round 3.</li>
-        <li><strong>The film is a function of time.</strong> Each frame is drawn 12 times at slightly different moments and averaged for motion blur, soft shadows and depth of field. About 4–5 minutes to render 60 s on a MacBook Pro.</li>
-        <li><strong>The code on screen is real</strong> — the glowing page is the film's own source, and the lens is literally the <code>LENS</code> numbers spun with <code>THREE.LatheGeometry</code>.</li>
-      </ul>
-    </section>
-
-    <section class="card how" aria-labelledby="stack">
-      <h2 id="stack">What was used</h2>
-      <ul>
-        <li><strong>Three.js</strong> (MIT) + <strong>TypeScript</strong>, captured with Playwright, encoded with FFmpeg.</li>
-        <li>No footage, no downloaded 3D models; reflections use two free CC0 studio HDRIs (Poly Haven).</li>
-        <li>Voice: Kokoro-82M (open-source TTS). Music and sound effects: synthesized in Python, no samples.</li>
-        <li>Claude Code needs a paid Claude plan. Results vary run to run — expect to iterate.</li>
+        <li>Expect to iterate: ask Claude to render frames, look at them and fix what it sees.</li>
+        <li>Claude Code needs a paid Claude plan.</li>
       </ul>
     </section>
 

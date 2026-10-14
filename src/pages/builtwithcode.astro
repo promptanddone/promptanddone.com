@@ -1,0 +1,77 @@
+---
+// promptanddone.com/builtwithcode — the PROMPT deliverable for the "Claude built this video with code" reel.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import prompt from '../data/builtwithcode-prompt.md?raw';
+---
+<BaseLayout title="The Exact Prompt: Claude Built This Video With Code — Prompt & Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · PROMPT</p>
+      <h1>The exact prompt:<br />Claude built this video with code</h1>
+      <p class="tag">Every frame of the reel (the camera, the character, the island, the light, every camera move) is TypeScript + Three.js, rendered frame by frame. Here's the prompt that started it, word for word.</p>
+    </header>
+
+    <section class="card" aria-labelledby="p1">
+      <h2 id="p1"><span class="n">1</span> The prompt</h2>
+      <p class="sub">Paste it into Claude Code in an empty folder. It's long on purpose: it sets the bar for quality, motion and checking its own work.</p>
+      <button class="copy" data-copy="prompt" type="button">Copy prompt</button>
+      <a class="dl" href="/builtwithcode/prompt.md" download>Download .md</a>
+      <div class="prompt">{prompt}</div>
+    </section>
+
+    <section class="card how" aria-labelledby="how">
+      <h2 id="how">What happened after the prompt</h2>
+      <ul>
+        <li><strong>One prompt started it — it wasn't one-shot.</strong> Claude Code (Claude Opus 5.5) wrote the code, rendered frames, looked at them and fixed what it saw, in one long session.</li>
+        <li><strong>Three independent review rounds.</strong> A fresh Claude reviewer judged each render; it failed rounds 1 and 2 and passed round 3.</li>
+        <li><strong>The film is a function of time.</strong> Each frame is drawn 12 times at slightly different moments and averaged for motion blur, soft shadows and depth of field. About 4–5 minutes to render 60 s on a MacBook Pro.</li>
+        <li><strong>The code on screen is real</strong> — the glowing page is the film's own source, and the lens is literally the <code>LENS</code> numbers spun with <code>THREE.LatheGeometry</code>.</li>
+      </ul>
+    </section>
+
+    <section class="card how" aria-labelledby="stack">
+      <h2 id="stack">What was used</h2>
+      <ul>
+        <li><strong>Three.js</strong> (MIT) + <strong>TypeScript</strong>, captured with Playwright, encoded with FFmpeg.</li>
+        <li>No footage, no downloaded 3D models; reflections use two free CC0 studio HDRIs (Poly Haven).</li>
+        <li>Voice: Kokoro-82M (open-source TTS). Music and sound effects: synthesized in Python, no samples.</li>
+        <li>Claude Code needs a paid Claude plan. Results vary run to run — expect to iterate.</li>
+      </ul>
+    </section>
+
+    <footer>© Prompt &amp; Done</footer>
+  </main>
+</BaseLayout>
+
+<script define:vars={{ prompt }}>
+  document.querySelectorAll('.copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(prompt);
+        btn.textContent = 'Copied ✓';
+      } catch (e) {
+        btn.textContent = 'Copy failed — select manually';
+      }
+      setTimeout(() => { btn.textContent = 'Copy prompt'; }, 2000);
+    });
+  });
+</script>
+
+<style>
+  main { width: min(100% - 2.25rem, 44rem); margin: 0 auto; padding: clamp(2rem, 7vh, 4rem) 0 2.5rem; }
+  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
+  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
+  h1 { margin: 0; font-size: clamp(1.9rem, 8.5vw, 3.25rem); font-weight: 900; line-height: 1.05; letter-spacing: -.03em; white-space: normal; }
+  .tag { margin: 1rem 0 0; font-size: 1rem; line-height: 1.5; color: var(--soft); }
+  .card { margin-top: 1.75rem; border: 1px solid var(--line); border-radius: 1rem; padding: 1.4rem 1.35rem; background: #101011; }
+  .card h2 { margin: 0; font-size: 1.3rem; font-weight: 900; letter-spacing: -.01em; display: flex; align-items: center; gap: .65rem; }
+  .n { display: inline-flex; align-items: center; justify-content: center; width: 1.9rem; height: 1.9rem; border-radius: 999px; background: var(--accent); color: #191100; font-size: 1.05rem; flex: none; }
+  .sub { margin: .6rem 0 0; color: var(--soft); font-size: .95rem; }
+  .prompt { margin-top: 1rem; white-space: pre-wrap; font-size: .9rem; line-height: 1.6; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: .6rem; padding: 1rem 1.1rem; overflow-wrap: anywhere; max-height: 28rem; overflow-y: auto; }
+  .copy { margin-top: .9rem; display: inline-block; font-family: inherit; font-weight: 700; font-size: .95rem; color: #191100; background: var(--accent); border: none; border-radius: .6rem; padding: .7rem 1.3rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .dl { margin-left: .75rem; color: var(--accent); font-weight: 700; font-size: .95rem; }
+  .how ul { margin: .8rem 0 0; padding-left: 1.2rem; line-height: 1.65; color: var(--ink); }
+  .how li { margin-bottom: .55rem; }
+  code { font-size: .88em; }
+  footer { margin-top: 2.5rem; color: var(--soft); font-size: .85rem; }
+</style>

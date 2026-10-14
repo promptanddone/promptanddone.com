@@ -36,6 +36,15 @@ export type Tool = Omit<Link, 'icon'> & {
 
 export const tools: Tool[] = [
   {
+    label: 'The PROMPT: Claude built this video',
+    href: 'https://promptanddone.com/go/builtwithcode',
+    ariaLabel: 'Open the exact prompt behind the reel Claude built entirely with code',
+    description: 'The exact prompt that started our 60-second Three.js film, word for word, plus what happened after it (three review rounds) and the tool stack.',
+    external: false,
+    event: 'click-tool-builtwithcode',
+    kind: 'prompt',
+  },
+  {
     label: 'The RELINK pack',
     href: 'https://promptanddone.com/go/relink',
     ariaLabel: 'Open the RELINK pack — the two open-source projects teaching PCs to run PS5 games',

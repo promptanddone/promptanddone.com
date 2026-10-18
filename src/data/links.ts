@@ -338,4 +338,13 @@ export const tools: Tool[] = [
     event: 'click-tool-anatomy',
     kind: 'tool',
   },
+  {
+    label: 'Chief of Staff',
+    href: 'https://promptanddone.com/go/chief/',
+    ariaLabel: 'Get Chief of Staff — the free Claude Code skill that hands one goal to a team of background agents',
+    description: 'A free Claude Code skill (beta): give Claude one goal and it hands the work to background agents while you keep chatting. Install line, how to run it and the exact goal from the reel inside.',
+    external: false,
+    event: 'click-tool-chief',
+    kind: 'tool',
+  },
 ];

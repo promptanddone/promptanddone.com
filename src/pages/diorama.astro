@@ -3,9 +3,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const prompt = `Build one index.html file with Three.js (load it from unpkg with an importmap). Make an animated 3D [YOUR WORLD]. Make it look premium: soft shadows, warm lighting, a slowly orbiting camera. No other files.`;
-const lines = [
-  ['Floating city (the hook)', 'floating city at night: flying cars, glowing windows, a waterfall pouring off the edge.'],
-  ['Coffee shop (the one-line change)', 'coffee shop: an espresso machine pouring, cups riding a conveyor, steam, a robot barista.'],
+const worlds = [
+  {name: 'Floating city', role: 'the hook', line: 'floating city at night: flying cars, glowing windows, a waterfall pouring off the edge.', href: '/diorama/city/', note: '9 min 24 s · $1.82 · first try, unedited'},
+  {name: 'Coffee shop', role: 'the one-line change', line: 'coffee shop: an espresso machine pouring, cups riding a conveyor, steam, a robot barista.', href: '/diorama/cafe/', note: '9 min 56 s · $1.88 · first try, unedited (Claude flagged small bugs: the robot reaches short of its button)'},
 ];
 const run = [
   ['Floating city', 'worked first try · 9 min 24 s · $1.82'],
@@ -30,9 +30,20 @@ const run = [
       <button class="copy" type="button">Copy prompt</button>
     </section>
 
-    <section class="card how" aria-labelledby="p2">
-      <h2 id="p2"><span class="n">2</span> The two lines from the reel</h2>
-      <div class="table-wrap"><table><tbody>{lines.map((r) => <tr><th>{r[0]}</th><td>{r[1]}</td></tr>)}</tbody></table></div>
+    <section class="card" aria-labelledby="p2">
+      <h2 id="p2"><span class="n">2</span> The two worlds from the reel</h2>
+      <p class="sub">The exact files Claude wrote, not touched by us. Open them and drag to look around.</p>
+      {worlds.map((w) => (
+        <div class="world">
+          <p class="wname"><strong>{w.name}</strong> <span>· {w.role}</span></p>
+          <div class="prompt">{w.line}</div>
+          <div class="btns">
+            <a class="copy" href={w.href} target="_blank" rel="noopener" data-umami-event={`diorama-open-${w.href.split('/')[2]}`}>See it live</a>
+            <a class="ghost" href={`${w.href}index.html`} download={`${w.href.split('/')[2]}.html`} data-umami-event={`diorama-download-${w.href.split('/')[2]}`}>Download index.html</a>
+          </div>
+          <p class="sub">{w.note}</p>
+        </div>
+      ))}
     </section>
 
     <section class="card how" aria-labelledby="p3">
@@ -46,7 +57,7 @@ const run = [
 </BaseLayout>
 
 <script define:vars={{ prompt }}>
-  const btn = document.querySelector('.copy');
+  const btn = document.querySelector('button.copy');
   btn.addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(prompt); btn.textContent = 'Copied ✓'; }
     catch (e) { btn.textContent = 'Copy failed — select manually'; }
@@ -145,4 +156,15 @@ const run = [
   th, td { text-align: left; vertical-align: top; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
   th { white-space: nowrap; }
   th { color: var(--soft); font-weight: 600; }
+  .world { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  .world:first-of-type { border-top: none; padding-top: 0; }
+  .wname { margin: 0; font-size: 1.05rem; }
+  .wname span { color: var(--soft); font-size: .92rem; }
+  .btns { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+  a.copy { text-decoration: none; }
+  .ghost {
+    margin-top: .9rem; display: inline-block; font-weight: 700; font-size: .95rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: .6rem; padding: .62rem 1.2rem; text-decoration: none;
+  }
+  .ghost:hover, .ghost:focus-visible { border-color: var(--accent); }
 </style>

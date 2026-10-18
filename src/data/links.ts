@@ -347,4 +347,13 @@ export const tools: Tool[] = [
     event: 'click-tool-chief',
     kind: 'tool',
   },
+  {
+    label: 'OpenMontage',
+    href: 'https://promptanddone.com/go/monty/',
+    ariaLabel: 'Get OpenMontage — the free open-source toolkit that turns Claude Code into a video crew',
+    description: 'A free, open-source toolkit: one prompt to Claude Code made a 30-second Apollo 11 documentary from real footage (4 approvals, 29 min, no API keys). The repo, the exact prompt and our run notes inside.',
+    external: false,
+    event: 'click-tool-monty',
+    kind: 'tool',
+  },
 ];

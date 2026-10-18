@@ -32,14 +32,15 @@ const run = [
 
     <section class="card" aria-labelledby="p2">
       <h2 id="p2"><span class="n">2</span> The two worlds from the reel</h2>
-      <p class="sub">The exact files Claude wrote, not touched by us. Open them and drag to look around.</p>
+      <p class="sub">Running live below: the exact files Claude wrote, not touched by us. Drag to look around.</p>
       {worlds.map((w) => (
         <div class="world">
           <p class="wname"><strong>{w.name}</strong> <span>· {w.role}</span></p>
           <div class="prompt">{w.line}</div>
+          <div class="stage"><iframe src={w.href} title={`${w.name}, built by Claude from the line above`} loading="lazy" allow="fullscreen"></iframe></div>
           <div class="btns">
-            <a class="copy" href={w.href} target="_blank" rel="noopener" data-umami-event={`diorama-open-${w.href.split('/')[2]}`}>See it live</a>
-            <a class="ghost" href={`${w.href}index.html`} download={`${w.href.split('/')[2]}.html`} data-umami-event={`diorama-download-${w.href.split('/')[2]}`}>Download index.html</a>
+            <a class="ghost" href={w.href} download={`${w.href.split('/')[2]}.html`} data-umami-event={`diorama-download-${w.href.split('/')[2]}`}>Download index.html</a>
+            <a class="full" href={w.href} target="_blank" rel="noopener" data-umami-event={`diorama-open-${w.href.split('/')[2]}`}>Full screen ↗</a>
           </div>
           <p class="sub">{w.note}</p>
         </div>
@@ -167,4 +168,9 @@ const run = [
     border: 1px solid var(--line); border-radius: .6rem; padding: .62rem 1.2rem; text-decoration: none;
   }
   .ghost:hover, .ghost:focus-visible { border-color: var(--accent); }
+  .stage { margin-top: 1rem; border: 1px solid var(--line); border-radius: .8rem; overflow: hidden; background: #000; aspect-ratio: 4 / 3; }
+  .stage iframe { display: block; width: 100%; height: 100%; border: 0; }
+  @media (max-width: 34rem) { .stage { aspect-ratio: 1 / 1; } }
+  .full { margin-top: .9rem; color: var(--soft); font-size: .92rem; text-decoration: none; }
+  .full:hover, .full:focus-visible { color: var(--accent); }
 </style>

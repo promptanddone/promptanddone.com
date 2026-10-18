@@ -356,4 +356,13 @@ export const tools: Tool[] = [
     event: 'click-tool-monty',
     kind: 'tool',
   },
+  {
+    label: 'DIORAMA prompt',
+    href: 'https://promptanddone.com/go/diorama/',
+    ariaLabel: 'Get the DIORAMA prompt — one prompt that makes Claude build a whole animated 3D world with Three.js',
+    description: 'One prompt makes Claude write a complete animated 3D world as a single HTML file (Three.js). Change one line, get a new world. The prompt, the two lines from the reel and our run notes (2 of 3 first tries worked) inside.',
+    external: false,
+    event: 'click-tool-diorama',
+    kind: 'tool',
+  },
 ];

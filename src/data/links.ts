@@ -329,4 +329,13 @@ export const tools: Tool[] = [
     event: 'click-tool-rea',
     kind: 'tool',
   },
+  {
+    label: 'Anatomy',
+    href: 'https://promptanddone.com/go/anatomy/',
+    ariaLabel: 'Get Anatomy — the free Claude Code skill that turns one line into a working machine',
+    description: 'A free, open-source Claude Code skill: ask how something works and it builds an interactive machine you can drag, press and take apart. Install line and the exact prompt from the reel inside.',
+    external: false,
+    event: 'click-tool-anatomy',
+    kind: 'tool',
+  },
 ];

@@ -365,4 +365,13 @@ export const tools: Tool[] = [
     event: 'click-tool-diorama',
     kind: 'tool',
   },
+  {
+    label: 'last30days',
+    href: 'https://promptanddone.com/go/verdict/',
+    ariaLabel: 'Get last30days — the free Claude Code skill that reads Reddit, Hacker News, GitHub and Polymarket and writes a cited verdict',
+    description: 'A free (MIT) Claude Code skill: ask a question and it reads the last 30 days of Reddit, Hacker News, GitHub and Polymarket, then writes a brief with links and a "choose X if" verdict. Install lines, the exact command from the reel and five prompts to try inside.',
+    external: false,
+    event: 'click-tool-verdict',
+    kind: 'tool',
+  },
 ];

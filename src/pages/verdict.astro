@@ -1,0 +1,33 @@
+---
+// promptanddone.com/verdict — the VERDICT pack (DM deliverable for the "last30days-internet-verdict" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const installClaude = '/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days';
+const installOther = 'npx skills add mvanhorn/last30days-skill -g';
+const ours = '/last30days Claude Code vs Codex --deep';
+const prompts = [
+  '/last30days Cursor vs Claude Code vs Codex',
+  '/last30days is Claude Max worth it --quick',
+  '/last30days <person you meet tomorrow>',
+  "/last30days what's exploding in AI agents?",
+  '/last30days <thing you are about to buy> --quick',
+];
+---
+<BaseLayout title="last30days: let the internet decide — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · VERDICT pack</p>
+      <h1>Ask Claude what the internet actually said</h1>
+      <p class="tag">last30days is a free (MIT) skill by Matt Van Horn. Type <code>/last30days</code> and a question: it searches Reddit, Hacker News, Polymarket and GitHub with no API keys, scores posts by real engagement and writes a brief with a link on every claim, ending in "choose X if".</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Install</h2>
+      <p>In Claude Code:</p><pre><code>{installClaude}</code></pre>
+      <p>Codex, Cursor, Gemini CLI and other agent hosts:</p><pre><code>{installOther}</code></pre>
+      <p><a href="https://github.com/mvanhorn/last30days-skill">The repo on GitHub</a>. Needs Python 3.12+. X, YouTube, TikTok and more sources unlock after its setup (some need keys or browser sign-ins).</p></section>
+    <section class="card"><h2><span class="n">2</span> The exact command from the reel</h2><pre><code>{ours}</code></pre>
+      <p>Our run (18 Oct 2026, Claude Code, Sonnet 5.5): 28 Reddit threads, 24 Hacker News stories, 10 Polymarket markets and GitHub, about 5 minutes, about $0.61 at API prices (we were on a Max plan). YouTube was rate-limited that run, X was off. Treat sentiment as directional, and open the links.</p></section>
+    <section class="card"><h2><span class="n">3</span> Five more to try</h2><ul>{prompts.map(p => <li><code>{p}</code></li>)}</ul>
+      <p><code>--quick</code> is faster with fewer sources; <code>--deep</code> reads more. Our "is Claude Max worth it --quick" run took 65 seconds.</p></section>
+    <section class="card"><h2><span class="n">4</span> Good to know</h2>
+      <p>It saves each brief as a markdown file in <code>~/Documents/Last30Days</code>. Check quotes against the linked threads before you repeat them: in our run one Reddit thread about a third-party plugin was summarised as a Claude Code feature.</p></section>
+  </main>
+</BaseLayout>

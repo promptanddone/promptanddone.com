@@ -374,4 +374,13 @@ export const tools: Tool[] = [
     event: 'click-tool-verdict',
     kind: 'tool',
   },
+  {
+    label: '/code-review bug hunt',
+    href: 'https://promptanddone.com/go/bughunt/',
+    ariaLabel: 'Get the BUGHUNT pack — Claude Code /code-review plus a demo repo with five planted bugs',
+    description: "Claude Code's built-in /code-review reviews your branch before you merge. The command with effort levels and --fix, the demo shop repo with five planted bugs, and what our run found (all five plus five we didn't plant) inside.",
+    external: false,
+    event: 'click-tool-bughunt',
+    kind: 'tool',
+  },
 ];

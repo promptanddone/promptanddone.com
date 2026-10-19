@@ -1,0 +1,36 @@
+---
+// promptanddone.com/bughunt: the BUGHUNT pack (DM deliverable for the "claude-code-review-bug-hunt" reel).
+import BaseLayout from '../layouts/BaseLayout.astro';
+const cmds = '/code-review\n/code-review high\n/code-review high --fix';
+const levels = ['low', 'medium', 'high', 'xhigh', 'max'];
+const f0 = "async function cartTotal(items) {\n  let sum = 0;\n  for (let i = 0; i <= items.length; i++) {\n    sum += items[i].price * items[i].qty;\n  }\n  return sum;\n}\n\nasync function applyCoupon(code, sum) {\n  const coupon = fetch(`https://api.cornershop.dev/coupons/${code}`).then((r) => r.json());\n  if (coupon.valid) return sum * (1 - coupon.discount);\n  return sum;\n}\n\nmodule.exports = { cartTotal, applyCoupon };\n";
+const f1 = "const STRIPE_KEY = 'sk_live_51Hx9EXAMPLEkey';\n\nasync function charge(amount, customerId) {\n  const res = await fetch('https://api.stripe.com/v1/charges', {\n    method: 'POST',\n    headers: { Authorization: `Bearer ${STRIPE_KEY}` },\n    body: new URLSearchParams({ amount, currency: 'usd', customer: customerId }),\n  });\n  return res.json();\n}\n\nmodule.exports = { charge };\n";
+const f2 = "const crypto = require('crypto');\nconst db = require('./db');\n\nfunction findUser(email) {\n  return db.query(\"SELECT * FROM users WHERE email = '\" + email + \"'\")[0];\n}\n\nfunction hashPassword(password) {\n  return crypto.createHash('md5').update(password).digest('hex');\n}\n\nfunction login(email, password) {\n  const user = findUser(email);\n  return user && user.password_hash === hashPassword(password);\n}\n\nmodule.exports = { findUser, hashPassword, login };\n";
+const f3 = "const { cartTotal, applyCoupon } = require('./cart');\nconst { charge } = require('./payments');\nconst { login } = require('./users');\n\nmodule.exports = (app) => {\n  app.post('/login', (req, res) => {\n    res.json({ ok: login(req.body.email, req.body.password) });\n  });\n\n  app.post('/checkout', async (req, res) => {\n    const sum = await cartTotal(req.body.items);\n    const total = await applyCoupon(req.body.coupon, sum);\n    res.json(await charge(Math.round(total * 100), req.body.customerId));\n  });\n};\n";
+const db = "const sqlite = require('better-sqlite3')('shop.db');\n\nmodule.exports = {\n  query: (sql, params = []) => sqlite.prepare(sql).all(...params),\n  run: (sql, params = []) => sqlite.prepare(sql).run(...params),\n};\n";
+const pkg = "{\n  \"name\": \"corner-shop\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"main\": \"src/server.js\",\n  \"dependencies\": {\n    \"better-sqlite3\": \"^11.0.0\",\n    \"express\": \"^4.19.2\"\n  }\n}\n";
+const srv = "const express = require('express');\nconst app = express();\napp.use(express.json());\n\napp.get('/health', (req, res) => res.json({ ok: true }));\nrequire('./routes')(app);\n\napp.listen(3000, () => console.log('corner-shop on :3000'));\n";
+const files = [['src/server.js', srv], ['src/cart.js', f0], ['src/payments.js', f1], ['src/users.js', f2], ['src/routes.js', f3], ['src/db.js', db], ['package.json', pkg]];
+const planted = [["src/cart.js:3", "for (let i = 0; i <= items.length; i++): off-by-one, every checkout throws a TypeError"], ["src/cart.js:10", "the coupon fetch is missing await, so coupons never apply"], ["src/payments.js:1", "a hardcoded sk_live_ Stripe key (a FAKE value in this demo)"], ["src/users.js:5", "SQL injection: the email is pasted into the query string"], ["src/users.js:9", "unsalted MD5 password hashing"]];
+---
+<BaseLayout title="Planted-bug demo repo + /code-review — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · BUGHUNT pack</p>
+      <h1>I hid 5 bugs. One command found them.</h1>
+      <p class="tag"><code>/code-review</code> is built into Claude Code. With no target it reviews the changes on your current branch and lists what it finds. Run it before you merge.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The command</h2>
+      <pre><code>{cmds}</code></pre>
+      <p>Effort levels: {levels.map(l => <code>{l}</code>)} (we ran <code>high</code>). Add <code>--fix</code> to apply the findings after the review, or answer "yes, fix them" in the session like we did. It works on any plan and uses your plan's usage. Official docs: <a href="https://code.claude.com/docs/en/code-review-local">code.claude.com/docs/en/code-review-local</a>.</p></section>
+    <section class="card"><h2><span class="n">2</span> The demo repo (5 planted bugs)</h2>
+      <p>A tiny Express shop, <code>corner-shop</code>. Make a repo, commit <code>package.json</code>, <code>db.js</code> and a <code>server.js</code> with only the health route to <code>main</code>, then on a branch called <code>checkout</code> add the four new files below and the <code>require('./routes')(app)</code> line in <code>server.js</code> and run <code>/code-review high</code>.</p>
+      <ul>{planted.map(([where, what]) => <li><code>{where}</code> {what}</li>)}</ul>
+      {files.map(([name, body]) => <details><summary><code>{name}</code></summary><pre><code>{body}</code></pre></details>)}
+      <p>The Stripe key in <code>payments.js</code> is a fake placeholder in the <code>sk_live_</code> format. Never commit a real one.</p></section>
+    <section class="card"><h2><span class="n">3</span> What we saw (19 Oct 2026)</h2>
+      <p>Claude Code v2.1.303, Opus 5.5, <code>/code-review high</code>: ten findings on screen 38 seconds after Enter. All five planted bugs, plus five real ones we did not plant (prices taken from the client, no authentication on checkout, Stripe errors returned as success, an unchecked coupon input, and an account-enumeration response). Saying "yes, fix them" changed the code for all ten.</p></section>
+    <section class="card"><h2><span class="n">4</span> Still on you</h2>
+      <p>Rotate any key that ever reached git history (deleting the line is not enough). Our fix also needed a products table and a <code>stripe_customer_id</code> column, plus a password reset for existing MD5 hashes. One run on one planted branch is not a guarantee: it does not catch every bug and does not replace a human review.</p></section>
+  </main>
+</BaseLayout>

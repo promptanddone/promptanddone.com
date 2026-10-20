@@ -392,4 +392,13 @@ export const tools: Tool[] = [
     event: 'click-tool-headroom',
     kind: 'tool',
   },
+  {
+    label: 'Ponytail: 59 lines or 6',
+    href: 'https://promptanddone.com/go/ponytail/',
+    ariaLabel: 'Get the PONYTAIL pack — the free Claude Code skill that writes less code, plus our 24-run test',
+    description: "Ponytail (free, MIT) makes Claude Code check what already exists before it writes code. Our test, same prompts with and without it: 1,046 lines vs 243 across four tasks, all 24 versions built. The two install lines, the four prompts and the real 6-line date picker inside.",
+    external: false,
+    event: 'click-tool-ponytail',
+    kind: 'tool',
+  },
 ];

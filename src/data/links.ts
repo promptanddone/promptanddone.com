@@ -383,4 +383,13 @@ export const tools: Tool[] = [
     event: 'click-tool-bughunt',
     kind: 'tool',
   },
+  {
+    label: 'Headroom token test',
+    href: 'https://promptanddone.com/go/headroom/',
+    ariaLabel: 'Get the HEADROOM test kit — where Headroom cut Claude\'s tokens 94% and where it saved 2%',
+    description: "Headroom (free, Apache-2.0) squeezes logs before Claude reads them. Our test: a big log sent straight to Claude went from 149,481 to 8,754 tokens with the same answer; inside Claude Code it saved about 2%. The Python snippet for your own agent, the exact numbers and the scripts to rerun it inside.",
+    external: false,
+    event: 'click-tool-headroom',
+    kind: 'tool',
+  },
 ];

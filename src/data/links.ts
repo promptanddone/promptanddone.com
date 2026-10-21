@@ -401,4 +401,13 @@ export const tools: Tool[] = [
     event: 'click-tool-ponytail',
     kind: 'tool',
   },
+  {
+    label: '/goal: 5 finish lines',
+    href: 'https://promptanddone.com/go/goalline/',
+    ariaLabel: 'Get the GOALLINE pack — five /goal finish lines for Claude Code, the recipe and our Lighthouse audit script',
+    description: "/goal is built into Claude Code: you type the finish line and a second model checks it after every turn. Our test: a broken demo site went from Lighthouse 56/47/62/73 to 100 x4, the judge said \"not yet\" when Claude rewrote three links, and the goal closed on turn 2. Five finish lines, the recipe and the audit script inside.",
+    external: false,
+    event: 'click-tool-goalline',
+    kind: 'tool',
+  },
 ];

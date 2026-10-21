@@ -1,0 +1,49 @@
+---
+// promptanddone.com/goalline: the GOALLINE pack (DM deliverable for the "claude-goal-finish-line" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const lines = [
+  {title: 'Perfect Lighthouse scores (the one from the reel)', line: "/goal npm run audit shows 100 on all four Lighthouse scores. Don't edit audit.mjs or remove any page content.", note: 'Tested 20 Oct 2026 on a demo site we broke on purpose: 56 / 47 / 62 / 73 to 100 x4, 2 turns, 3 min 38 s. Needs an audit script that prints the four scores. Ours is below.'},
+  {title: 'Every test passes', line: "/goal npm test exits 0 with every test passing. Don't edit or delete any test file. Stop after 15 turns.", note: 'Tested 18 Oct 2026 on a small Node project with 3 failing tests: 6 turns, all 5 tests green, test file untouched.'},
+  {title: 'Zero type errors', line: '/goal npx tsc --noEmit prints no errors, without adding any "any" types or @ts-ignore comments. Stop after 20 turns.', note: 'Swap in your own type-check command (mypy, cargo check...).'},
+  {title: 'Empty the backlog', line: '/goal every unchecked box in TODO.md is checked, with the commit hash written next to it, and npm test still passes. Stop after 30 turns.', note: "Good for overnight work. Use auto mode so turns don't wait on permission prompts."},
+  {title: 'Split the giant file', line: '/goal every file in src/ is under 300 lines and npm test still passes, without renaming any exported function. Stop after 20 turns.', note: 'Adapted from the size-budget example in the official docs.'},
+];
+const audit = `// audit.mjs: prints the four Lighthouse scores for the site in this folder
+import { execFileSync, spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+const server = spawn('npx', ['--yes', 'http-server', '.', '-p', '4173', '-s', '-c-1'], { stdio: 'ignore' });
+await new Promise(r => setTimeout(r, 2500));
+try {
+  execFileSync('npx', ['--yes', 'lighthouse', 'http://localhost:4173/', '--quiet',
+    '--chrome-flags=--headless=new', '--output=json', '--output-path=./lighthouse.json'], { stdio: 'ignore' });
+  const c = JSON.parse(readFileSync('./lighthouse.json', 'utf8')).categories;
+  for (const [k, n] of [['performance', 'Performance'], ['accessibility', 'Accessibility'], ['best-practices', 'Best Practices'], ['seo', 'SEO']])
+    console.log(n.padEnd(16) + Math.round(c[k].score * 100));
+} finally { server.kill(); }`;
+---
+<BaseLayout title="5 /goal finish lines for Claude Code — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · GOALLINE pack</p>
+      <h1>Don't tell Claude what to do. Tell it when it's done.</h1>
+      <p class="tag"><code>/goal</code> is built into <a href="https://code.claude.com/docs/en/goal">Claude Code</a>. You type a finish line and Claude keeps working, turn after turn. After every turn a second model reads the conversation and decides: not yet, met, or impossible. It stops when the condition is actually true, not when Claude feels finished.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The recipe</h2>
+      <ul>
+        <li><b>One measurable end state:</b> a test result, an exit code, a score, a file count, an empty list.</li>
+        <li><b>A stated check:</b> the command that proves it ("npm test exits 0"). The judge only reads the chat, so Claude has to run the check where it can see it.</li>
+        <li><b>Constraints:</b> what must not change on the way there. In our run this clause is what caught Claude.</li>
+        <li><b>A cap:</b> "Stop after 20 turns" keeps it from running forever.</li>
+      </ul>
+      <p>Run it in auto mode (<code>Shift+Tab</code>) so the turns don't stop for permission prompts. <code>/goal</code> with nothing after it shows the status; <code>/goal clear</code> stops it.</p></section>
+    <section class="card"><h2><span class="n">2</span> Five finish lines</h2>
+      <ol>{lines.map(l => <li><p><b>{l.title}</b></p><pre><code>{l.line}</code></pre><p class="note">{l.note}</p></li>)}</ol></section>
+    <section class="card"><h2><span class="n">3</span> What happened in the reel</h2>
+      <p>Claude Code (Opus 5.5) took our deliberately broken coffee-shop page from Lighthouse 56 / 47 / 62 / 73 to 100 / 100 / 100 / 100 in about two minutes, and ended its turn. The judge answered "Goal not yet met": to pass the SEO check, Claude had rewritten three nav links ("click here" became "Our menu"), and that broke "don't remove any page content". On turn 2 it put the words back (adding hidden descriptive text for screen readers), re-ran the audit (still 100 x4), and the goal closed: <code>Goal achieved (3m · 2 turns · 13.3k tokens)</code>.</p></section>
+    <section class="card"><h2><span class="n">4</span> The audit script from the reel</h2>
+      <p>Save it as <code>audit.mjs</code> in your site folder and add <code>"audit": "node audit.mjs"</code> to <code>package.json</code>. It needs Node and Chrome.</p>
+      <pre><code>{audit}</code></pre></section>
+    <section class="card"><h2><span class="n">5</span> Fair to say</h2>
+      <p>Our site was a small demo we broke on purpose; a real site is harder, and 100s on Lighthouse don't make a site good on their own. Read what Claude changed: it removed two unused scripts and moved permission prompts behind a click, and it told us which calls were ours to make. Evaluation runs on your small fast model and uses a little extra usage.</p></section>
+  </main>
+</BaseLayout>

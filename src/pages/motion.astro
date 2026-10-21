@@ -1,0 +1,36 @@
+---
+// promptanddone.com/motion: the MOTION pack (DM deliverable for the "claude-motion-graphics" reel). Deployed 21 Oct 2026.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const p1 = "Using /hyperframes, make a 12-second vertical launch video for the open-source repo Graphify, which turns any codebase into a knowledge graph: a hook line, an animated node graph that grows, three features, its GitHub star count of 131,497 counting up, and an end card. Render it to MP4.";
+const p2 = "Using /hyperframes, make a 6-second vertical intro for my AI channel Prompt & Done: the words ONE PROMPT. DONE. slam in with kinetic type, a lightning bolt draws itself, and it ends on a clean logo lockup. Render it to MP4.";
+const p3 = "Using /hyperframes, make a 10-second vertical video: an animated bar chart race of today's trending AI repos on GitHub by stars: Ponytail 171,414, ComfyUI 141,438, Graphify 131,497, HyperFrames 69,142, Cloudflare Security Audit 36,003. Render it to MP4.";
+---
+<BaseLayout title="Make motion graphics with Claude (HyperFrames) — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · MOTION pack</p>
+      <h1>One prompt to Claude, one finished motion graphic.</h1>
+      <p class="tag"><a href="https://github.com/heygen-com/hyperframes">HyperFrames</a> (by HeyGen, Apache-2.0, free) teaches Claude Code to write a video as an HTML page and render it frame by frame in headless Chrome into an MP4, on your own computer. No editor, no timeline, no per-render fees.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Set it up (2 minutes)</h2>
+      <p>You need Claude Code (a Claude plan), Node.js 22+ and FFmpeg. Then, in Claude Code's terminal:</p>
+      <pre><code>claude plugin marketplace add heygen-com/hyperframes
+claude plugin install hyperframes@hyperframes</code></pre>
+      <p>Or just the skills, inside a project folder: <code>npx skills add heygen-com/hyperframes</code> (pick "Core Skills").</p></section>
+    <section class="card"><h2><span class="n">2</span> The launch video from the reel</h2>
+      <pre><code>{p1}</code></pre>
+      <p class="note">Our run, 21 Oct 2026, Claude Code with Opus 5.5: 7 min 18 s, one prompt, no follow-ups. It looked up the repo, downloaded its real logo, built five scenes, checked its own frames, noticed the end-card logo was missing, fixed it and rendered a 12-second 1080×1920 MP4.</p></section>
+    <section class="card"><h2><span class="n">3</span> Two more we ran</h2>
+      <p><b>Channel intro</b> (2 min 35 s; it spotted blurry words in its own frames and fixed them):</p>
+      <pre><code>{p2}</code></pre>
+      <p><b>Animated chart</b> (1 min 51 s):</p>
+      <pre><code>{p3}</code></pre></section>
+    <section class="card"><h2><span class="n">4</span> Tips</h2>
+      <ul>
+        <li>Swap in your own name, numbers and colours. Give real numbers: it animates what you give it.</li>
+        <li>Say "vertical" for Reels/TikTok, or ask for 16:9 for YouTube.</li>
+        <li>Want changes? Just say so ("faster", "use my brand colours") and it re-renders.</li>
+        <li>It's best at short, design-led pieces (intros, stat count-ups, logo stings, lower thirds, launch teasers), not long edits.</li>
+      </ul></section>
+  </main>
+</BaseLayout>

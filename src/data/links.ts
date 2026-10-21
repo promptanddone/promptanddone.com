@@ -419,4 +419,13 @@ export const tools: Tool[] = [
     event: 'click-tool-inklight',
     kind: 'tool',
   },
+  {
+    label: 'MOTION: one prompt, one launch video',
+    href: 'https://promptanddone.com/go/motion/',
+    ariaLabel: 'Get the MOTION pack — the HyperFrames setup for Claude Code and the three prompts behind our motion graphics',
+    description: "HyperFrames (free, Apache-2.0) lets Claude Code write a video as a web page and render it frame by frame on your computer. Our runs: a 12-second launch video in 7 min 18 s (it caught and fixed a missing logo itself), a channel intro in 2 min 35 s, an animated chart in 1 min 51 s. The two setup lines and all three prompts inside.",
+    external: false,
+    event: 'click-tool-motion',
+    kind: 'tool',
+  },
 ];

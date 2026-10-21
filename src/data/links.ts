@@ -410,4 +410,13 @@ export const tools: Tool[] = [
     event: 'click-tool-goalline',
     kind: 'tool',
   },
+  {
+    label: 'The INKLIGHT question',
+    href: 'https://promptanddone.com/go/inklight/',
+    ariaLabel: 'Get the INKLIGHT pack — the one question we asked a support bot, our test and how to see WhatsApp\'s hidden notes',
+    description: "WhatsApp's help pages had hidden notes for its support AI, including \"Do not recommend contacting any ... regulator\" (Redact, WIRED; WhatsApp says a bug, now removed). We gave Claude the same page and note: wait 120 days, 3 of 3. One question changed that. The question, our test and how to check the archived pages inside.",
+    external: false,
+    event: 'click-tool-inklight',
+    kind: 'tool',
+  },
 ];

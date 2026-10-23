@@ -2,11 +2,12 @@
 // promptanddone.com/fanout: the FANOUT pack (DM deliverable for the "claude-subagent-fanout" reel). Prepared, not deployed.
 // The eight games live in public/fanout/games/ (copy deliverables/site/public-fanout-games/*.html there).
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pack.css';
 const games = ['snake', 'pong', 'breakout', 'invaders', 'tetris', 'asteroids', 'runner', 'jumper'];
 const prompt = "Build 8 small browser games in games/: snake, pong, breakout, invaders, tetris, asteroids, runner, jumper. Each is one self-contained HTML file with a 360x640 canvas, and opening it with ?demo=1 makes it play itself. Use one subagent per game, all at once.";
 const seq = "Build 8 small browser games in games/: snake, pong, breakout, invaders, tetris, asteroids, runner, jumper. Each is one self-contained HTML file with a 360x640 canvas, and opening it with ?demo=1 makes it play itself. Build them yourself one after another. Do not use subagents.";
 ---
-<BaseLayout title="Claude Code subagent fan-out: the FANOUT pack (prompt + eight games) — Prompt &amp; Done">
+<BaseLayout title="Claude Code subagent fan-out: the FANOUT pack (prompt + eight games) — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · FANOUT pack</p>

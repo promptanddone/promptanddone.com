@@ -1,6 +1,7 @@
 ---
 // promptanddone.com/llamacode: the LLAMACODE pack (DM deliverable for the "claude-code-free-local" reel). Prepared, not deployed.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pack.css';
 const installOllama = "# macOS / Windows: download the app from https://ollama.com/download\n# Linux:\ncurl -fsSL https://ollama.com/install.sh | sh";
 const pull = "ollama pull qwen3.5";
 const installClaude = "# macOS / Linux\ncurl -fsSL https://claude.ai/install.sh | bash";
@@ -9,7 +10,7 @@ const manual = "export ANTHROPIC_AUTH_TOKEN=ollama\nexport ANTHROPIC_API_KEY=\"\
 const ctx = "OLLAMA_CONTEXT_LENGTH=64000 ollama serve";
 const prompt = "Make a one-page website for a farm stand, sized for a phone. One file: index.html.";
 ---
-<BaseLayout title="Claude Code on a free local model: the LLAMACODE pack — Prompt &amp; Done">
+<BaseLayout title="Claude Code on a free local model: the LLAMACODE pack — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · LLAMACODE pack</p>

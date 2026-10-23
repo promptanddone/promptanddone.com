@@ -1,6 +1,7 @@
 ---
 // promptanddone.com/depthpop: the DEPTHPOP pack (DM deliverable for the "photo-to-3d-depth-anything" reel). Prepared 22 Oct 2026, NOT deployed.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pack.css';
 const setup = 'python3 -m venv pop && source pop/bin/activate\npip install onnxruntime numpy pillow opencv-python-headless\n# ffmpeg must be on your PATH (macOS: brew install ffmpeg)';
 const run = 'python3 photo3d.py my_photo.jpg\n# -> my_photo_depth.png (the depth map) and my_photo_3d.mp4 (a 5 s looping 3D move)';
 const script = `#!/usr/bin/env python3
@@ -63,7 +64,7 @@ if __name__ == "__main__":
 `;
 const rows = [['One photo (1080 px), depth map', '0.28 s'], ['14 photos, depth maps only (decode + save included)', '4.0 s'], ['One photo, depth map + 5 s parallax video', 'about 12 s, mostly video encoding']];
 ---
-<BaseLayout title="DEPTHPOP: photo to 3D scene, free and offline — Prompt &amp; Done">
+<BaseLayout title="DEPTHPOP: photo to 3D scene, free and offline — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · DEPTHPOP pack</p>

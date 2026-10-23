@@ -1,6 +1,7 @@
 ---
 // promptanddone.com/blender: the BLENDER pack (DM deliverable for the "claude-blender-scene" reel). Prepared, not deployed.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pack.css';
 const setup = 'uvx mcp-for-blender setup';
 const manual1 = 'claude mcp add blender uvx mcp-for-blender';
 const manual2 = 'uvx mcp-for-blender install-addon';
@@ -11,7 +12,7 @@ const swaps = [
   'Inspect this scene and list collections, object counts and objects without materials. Then diagnose why my render comes out black.',
 ];
 ---
-<BaseLayout title="Claude + Blender: the setup — Prompt &amp; Done">
+<BaseLayout title="Claude + Blender: the setup — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · BLENDER pack</p>

@@ -499,4 +499,13 @@ export const tools: Tool[] = [
     event: 'click-tool-llamacode',
     kind: 'tool',
   },
+  {
+    label: 'NIGHTSHIFT: 8 reels from one prompt',
+    href: 'https://promptanddone.com/go/nightshift/',
+    ariaLabel: 'Get the NIGHTSHIFT pack — the prompt, skills and setup that made 8 reels while I slept',
+    description: 'The exact prompt that had Claude Code make 8 finished reels one at a time while I slept, plus the setup, trimmed skills, templates and the usage check.',
+    external: false,
+    event: 'click-tool-nightshift',
+    kind: 'tool',
+  },
 ];

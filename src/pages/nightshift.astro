@@ -1,0 +1,164 @@
+---
+// promptanddone.com/nightshift: the NIGHTSHIFT pack (DM deliverable for the "eight-reels-one-prompt" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pack.css';
+
+const exact = `make as many reel as you can one at a time, I am going to sleep.
+
+see usage.. if it expires then wake up 5 min after it resets`;
+
+const clean = `Make as many <items> as you can, one at a time, following <the skill/instructions file>. I'm going to sleep. Check my usage before each one; if the limit runs out, wake up 5 minutes after it resets and carry on. Keep a run log so you can resume. Stop if weekly usage passes about 90%.`;
+
+const orchestrator = `You are the orchestrator of an unattended batch job. I am asleep; do not ask me questions.
+
+GOAL: produce as many finished <ITEMS> as you can, one at a time, following <SKILL_FILE>.
+RUN LOG: keep <RUN_LOG_FILE>. Create it if missing. If it exists, read it first and resume from where it says you are.
+
+LOOP, for each item:
+1. Run the usage check (below). If weekly usage is about 90% or higher, stop launching new items and go to FINISH.
+2. If the current usage window is exhausted, schedule a one-shot wake-up alarm for 5 minutes after the reset time, record that in the run log, and end your turn. When you wake, read the run log and continue.
+3. Pick the next item: <ITEM_SELECTION_RULE>. It must not repeat anything already in the run log.
+4. Launch ONE fresh subagent with the brief template below, filled in with the item, the lessons so far and the list of previous items. Wait for it to report. Never run two items at once.
+5. When it reports, check its output against <DONE_CRITERIA>. Update the run log: item, status, what shipped, cost or usage used, and any lesson worth passing on. Add the useful lessons to LESSONS_SO_FAR so the next brief is better than the last.
+6. Go back to step 1.
+
+USAGE CHECK: run <USAGE_CHECK_COMMAND> before every item. It prints the percentage used and the reset time for the short window and the weekly window.
+
+FINISH: write a short summary of every item (done, partial, skipped) at the top of the run log, then stop. Do not publish, send, deploy or commit anything unless <PUBLISH_RULE> says so.`;
+
+const brief = `You are producing ONE finished <ITEM>, autonomously, end to end. Nobody is available to answer questions. Do not ask any; make the reasonable call, write the decision down in the item's README, and carry on until the item is delivered.
+
+THIS ITEM: <ITEM>
+IT IS NUMBER <N> OF A BATCH, made one at a time. Earlier items (do not repeat their topics or approach):
+<PREVIOUS_ITEMS_TO_AVOID_REPEATING>
+
+FOLLOW: <SKILL_FILE>. Read it first and follow it exactly. Read its referenced files only when the step that needs them starts.
+
+DEFINITION OF DONE: <DONE_CRITERIA>
+Check each criterion yourself before you report. Fix only what the check flags; do one production pass, not endless polishing.
+
+LESSONS FROM EARLIER ITEMS (apply these, they cost time to learn):
+<LESSONS_SO_FAR>
+
+HARD LIMITS
+- Spend cap: <BUDGET_CAP> in total for this item, including test runs. Plan the work to fit before starting. Stop and deliver what you have if you would exceed it.
+- Do not publish, send, deploy, post or commit anything unless this brief explicitly says so: <PUBLISH_RULE>.
+- Work only inside <ITEM_FOLDER>. Do not edit shared files except to add new ones.
+- Keep scratch files inside the item folder or a temp folder, and delete large intermediates when you finish. Quit anything you start.
+
+PROGRESS
+Keep a "Progress" section in <ITEM_FOLDER>/README.md. After every step, write: step done, next step, key decisions. If you are interrupted (a usage limit, a crash), another agent must be able to resume from that section alone.
+
+FINAL REPLY (under 250 words): what you delivered and where (full path), the result of each done-criterion check, the cost used against the cap, honest limitations, and anything I must decide.`;
+
+const research = `---
+name: video-research
+description: Find and fact-check the next topic for a short AI video. Use before writing any script, or when asked what to post next.
+---
+
+1. Sweep: search what AI users are watching and asking about this week (YouTube, Reddit, Hacker News, GitHub trending, official changelogs). Save the raw results.
+2. Rank 5-8 candidates by proven attention, how many people have the problem, and whether you can show a real result. Skip anything already in the log of past videos.
+3. Pick the top one yourself and write down why (no stop to ask).
+4. Fact-check the winner against primary sources: names, prices, availability, licences, dates. Put every claim you will say in a claim table with its source.`;
+
+const production = `---
+name: video-production
+description: Make one finished short-form video (25-35 s, 1080x1920) about an AI tool, end to end. Use for any new video.
+---
+
+Run every step without stopping; the owner judges the finished file.
+
+1. Research: run the video-research skill and record the pick.
+2. Test it for real: run the tool yourself and capture the actual input and output (recordings, files, times, costs).
+3. Script: one spoken paragraph, ~80-95 words. Open on the result in the first 2 seconds, then what it is, the prompt, the result, the payoff, one call to action. Every claim must be in the claim table.
+4. Voice: generate the voiceover and check it with speech-to-text against the script.
+5. Visuals: build the scenes in the house style, show the real output full-frame, add word-synced captions.
+6. Sound: music bed and effects, mixed to -14 LUFS.
+7. Render and QA: render, then check frames (no overlaps, black or flash frames), loudness, captions and length. Fix only what fails.
+8. Package: final MP4, cover image, caption, title and the resource page the call to action promises. Delete intermediate files.
+9. Never publish; publishing needs the owner's explicit OK.`;
+
+const usage = `#!/bin/bash
+# Claude plan usage: 5-hour and 7-day windows with local reset times. Token read from the keychain, never printed.
+# Output lines: "five_hour <pct> <reset-epoch> <reset-local>" and the same for seven_day.
+tok=$(security find-generic-password -s "Claude Code-credentials" -a "$USER" -w 2>/dev/null |
+  python3 -c 'import sys,json; print(json.load(sys.stdin)["claudeAiOauth"]["accessToken"])' 2>/dev/null)
+[ -z "$tok" ] && { echo "no credentials"; exit 1; }
+curl -s -m 15 https://api.anthropic.com/api/oauth/usage -H "Authorization: Bearer $tok" -H "anthropic-beta: oauth-2025-04-20" |
+python3 -c '
+import sys, json, datetime
+d = json.load(sys.stdin)
+for k in ("five_hour", "seven_day"):
+    w = d.get(k) or {}
+    r = w.get("resets_at")
+    t = datetime.datetime.fromisoformat(r).astimezone() if r else None
+    print(k, w.get("utilization"), int(t.timestamp()) if t else "-", t.strftime("%a %H:%M") if t else "-")
+'`;
+---
+<BaseLayout title="NIGHTSHIFT: one prompt, a night shift of finished work — Prompt & Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · NIGHTSHIFT pack</p>
+      <h1>NIGHTSHIFT: one prompt, a night shift of finished work.</h1>
+      <p class="tag">Tell Claude Code to keep working through a batch while you sleep: one item at a time, checking your usage, waking itself up after a limit resets. Below: the exact prompt I sent, a reusable version, the setup, the skills, what else you need, and copy-paste templates.</p>
+    </header>
+    <section class="card"><h2><span class="n">A</span> The prompt</h2>
+      <p>The exact prompt I sent, typos kept (Thu 22 Oct 2026, 12:25 CDT):</p>
+      <pre class="block">{exact}</pre>
+      
+      <p>A cleaned-up version you can reuse. Replace the angle-bracket parts:</p>
+      <pre class="block">{clean}</pre>
+      <button class="copy" type="button" data-k="clean">Copy reusable prompt</button></section>
+    <section class="card"><h2><span class="n">B</span> The setup</h2>
+      <ul>
+        <li>Skills that define what a finished item is (section C): Claude Code loads them on its own when the task matches.</li>
+        <li>One fresh subagent per item, run one at a time: the next starts only when the last one reports.</li>
+        <li>A run-state log file the orchestrator updates after every item, so any resume knows where it is.</li>
+        <li>A usage check before each item, plus a one-shot wake-up alarm 5 minutes after the reset. In Claude Code the alarm is a scheduled task inside the session, so leave the terminal open and the computer awake.</li>
+        <li>A stop rule (stop launching at about 90% weekly usage), and lessons from each finished item folded into the next brief. In my run the brief grew from about 520 to about 880 words over the batch.</li>
+      </ul></section>
+    <section class="card"><h2><span class="n">C</span> The skills</h2>
+      <p>The prompt works because Claude Code already knew what "a finished reel" means. That lives in two skills: folders in <code>.claude/skills/&lt;name&gt;/</code> with a <code>SKILL.md</code> that Claude Code loads when the task matches. Mine are longer and specific to my channel; these are trimmed, general versions to start from.</p>
+      <p><strong>Research skill</strong>: picks and fact-checks the topic. Save as <code>.claude/skills/video-research/SKILL.md</code>:</p>
+      <pre class="block">{research}</pre>
+      <button class="copy" type="button" data-k="research">Copy research skill</button>
+      <p><strong>Production skill</strong>: defines a finished video, step by step. Save as <code>.claude/skills/video-production/SKILL.md</code>:</p>
+      <pre class="block">{production}</pre>
+      <button class="copy" type="button" data-k="production">Copy production skill</button></section>
+    <section class="card"><h2><span class="n">D</span> What you also need</h2>
+      <p>The skills say what to do, not how. To make videos unattended, these tools have to work already, before you batch. A starter stack, mostly free:</p>
+      <ul>
+        <li><strong>Claude Code</strong> on a paid Claude plan (or API credits).</li>
+        <li><strong>ffmpeg</strong> to cut, mix and encode the video.</li>
+        <li><strong>A voice:</strong> a free local text-to-speech model such as Kokoro or Chatterbox, or a hosted one such as ElevenLabs.</li>
+        <li><strong>Whisper</strong> (speech-to-text) for word-timed captions and to check the voiceover says the script.</li>
+        <li><strong>A way to make the visuals:</strong> Remotion (React video; check its license if you are a company), or HTML / Three.js pages captured frame by frame with a headless browser (what I use).</li>
+      </ul>
+      <p><strong>Make one video by hand with Claude first.</strong> Turn what worked into the skill, and only then batch it. My skills and tools took weeks of single reels before one sentence was enough.</p></section>
+    <section class="card"><h2><span class="n">E</span> Templates</h2>
+      <p>Generic orchestrator prompt. It runs the loop and keeps the log:</p>
+      <pre class="block">{orchestrator}</pre>
+      <button class="copy" type="button" data-k="orchestrator">Copy orchestrator prompt</button>
+      <p>Generic per-item subagent brief. The orchestrator fills the slots and sends it to a fresh subagent for each item:</p>
+      <pre class="block">{brief}</pre>
+      <button class="copy" type="button" data-k="brief">Copy subagent brief</button></section>
+    <section class="card"><h2><span class="n">F</span> The usage-check script</h2>
+      <p>Save it as <code>claude-usage.sh</code>, make it executable, and have the orchestrator run it before each item. It reads your own Claude Code login from the macOS keychain and calls an unofficial endpoint that the <code>/usage</code> screen uses, which may change or break. It never prints the token. Use at your own risk and read it before running.</p>
+      <pre class="block">{usage}</pre>
+      <button class="copy" type="button" data-k="usage">Copy script</button></section>
+    <section class="card"><h2><span class="n">G</span> Honest note</h2>
+      <p>Real run: Claude Code, 22 Oct 2026, 8 reels in about 7 hours; the usage limit was not actually hit; I stepped in at the end to stop it.</p></section>
+  </main>
+</BaseLayout>
+
+
+<script define:vars={{ texts: { clean, research, production, orchestrator, brief, usage } }}>
+  document.querySelectorAll('.copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const label = btn.textContent;
+      try { await navigator.clipboard.writeText(texts[btn.dataset.k]); btn.textContent = 'Copied ✓'; }
+      catch { btn.textContent = 'Select and copy manually'; }
+      setTimeout(() => { btn.textContent = label; }, 1800);
+    });
+  });
+</script>

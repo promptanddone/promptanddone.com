@@ -1,0 +1,43 @@
+---
+// promptanddone.com/chatterbox: the CHATTERBOX pack (DM deliverable for the "chatterbox-free-voice-clone" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const install = "python3 -m venv .venv && source .venv/bin/activate   # Python 3.11 is what Resemble tests on\npip install chatterbox-tts";
+const script = "import torchaudio as ta\nfrom chatterbox.tts_turbo import ChatterboxTurboTTS\n\nmodel = ChatterboxTurboTTS.from_pretrained(device=\"mps\")   # \"cuda\" on an NVIDIA GPU, \"cpu\" otherwise\nwav = model.generate(\"Every word you heard was free. One prompt, and it talks in my voice.\", audio_prompt_path=\"my_voice.wav\")\nta.save(\"out.wav\", wav, model.sr)";
+const tag = "wav = model.generate(\"[laugh]\", audio_prompt_path=\"my_voice.wav\")";
+---
+<BaseLayout title="Chatterbox: the free local voice clone from the reel (the CHATTERBOX pack) — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · CHATTERBOX pack</p>
+      <h1>A free AI voice that runs on your own computer, cloned from a short clip.</h1>
+      <p class="tag">Chatterbox is an open-source text-to-speech family from Resemble AI (MIT license). Give it a short recording of a voice and type a line: it speaks it. The narration of the reel was made with it. This page has the install steps, the six-line script, tips for the reference clip and what we measured on 22 Oct 2026.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Install</h2>
+      <pre><code>{install}</code></pre>
+      <p>Repo and README: <a href="https://github.com/resemble-ai/chatterbox">github.com/resemble-ai/chatterbox</a>. Models (Turbo 350M for English with sound tags; Multilingual V3 500M) download from Hugging Face on first run; for Turbo that is roughly 4 GB, so leave disk space.</p></section>
+    <section class="card"><h2><span class="n">2</span> The script (README usage)</h2>
+      <pre><code>{script}</code></pre>
+      <p><code>my_voice.wav</code> is your reference clip. Resemble's README shows a 10-second clip; we used 14 seconds.</p></section>
+    <section class="card"><h2><span class="n">3</span> The laugh tag</h2>
+      <p>Turbo understands tags such as <code>[laugh]</code>, <code>[chuckle]</code> and <code>[cough]</code> (README). Try it as its own line:</p>
+      <pre><code>{tag}</code></pre>
+      <p>In our test, 7 of 8 seeds of a standalone <code>[laugh]</code> came back as laughter ("Ha ha ha ha.", "Heh heh") when transcribed with Whisper large-v3. The other tags were less reliable: <code>[sigh]</code>, <code>[cough]</code> and <code>[gasp]</code> sometimes produced stray words, so listen before you ship a take.</p></section>
+    <section class="card"><h2><span class="n">4</span> Tips for a good reference clip</h2>
+      <ul>
+        <li><b>One speaker, no music, little room echo</b>, about 10 to 15 seconds of natural speech.</li>
+        <li><b>The reference sets the accent and pace.</b> Record it the way you want the narration to sound.</li>
+        <li><b>Generate a few seeds</b> (change the torch seed) and keep the best take; run a speech-to-text check if the words must be exact.</li>
+        <li><b>Short lines first.</b> One or two sentences per call, then stitch.</li>
+      </ul></section>
+    <section class="card"><h2><span class="n">5</span> What we measured (22 Oct 2026)</h2>
+      <p>Apple M4 Pro Mac, Chatterbox Turbo 350M, PyTorch 2.6 on the Apple GPU (MPS), <code>chatterbox-tts</code> 0.1.7.</p>
+      <table><thead><tr><th>Test</th><th>Result</th></tr></thead><tbody>
+        <tr><td>A 5.0-second line, 5 warm runs (reference conditioning included in each)</td><td>median 3.36 s to generate (3.18 to 4.19 s); the first call after loading is slower and loading takes about 7 s</td></tr>
+        <tr><td>Standalone <code>[laugh]</code>, 8 seeds</td><td>7 transcribed as laughter</td></tr>
+        <tr><td>No network after download</td><td>worked (sockets disabled in the test process)</td></tr>
+      </tbody></table>
+      <p>One machine, one reference voice. We did not run the multilingual model and did not compare quality with paid services.</p></section>
+    <section class="card"><h2><span class="n">6</span> Use it responsibly</h2>
+      <p>Clone your own voice, or a voice you have permission to use. Chatterbox embeds an imperceptible Resemble "Perth" watermark in everything it generates (README), and the project asks you not to use it to do bad things.</p></section>
+  </main>
+</BaseLayout>

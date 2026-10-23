@@ -1,0 +1,33 @@
+---
+// promptanddone.com/fanout: the FANOUT pack (DM deliverable for the "claude-subagent-fanout" reel). Prepared, not deployed.
+// The eight games live in public/fanout/games/ (copy deliverables/site/public-fanout-games/*.html there).
+import BaseLayout from '../layouts/BaseLayout.astro';
+const games = ['snake', 'pong', 'breakout', 'invaders', 'tetris', 'asteroids', 'runner', 'jumper'];
+const prompt = "Build 8 small browser games in games/: snake, pong, breakout, invaders, tetris, asteroids, runner, jumper. Each is one self-contained HTML file with a 360x640 canvas, and opening it with ?demo=1 makes it play itself. Use one subagent per game, all at once.";
+const seq = "Build 8 small browser games in games/: snake, pong, breakout, invaders, tetris, asteroids, runner, jumper. Each is one self-contained HTML file with a 360x640 canvas, and opening it with ?demo=1 makes it play itself. Build them yourself one after another. Do not use subagents.";
+---
+<BaseLayout title="Claude Code subagent fan-out: the FANOUT pack (prompt + eight games) — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · FANOUT pack</p>
+      <h1>Eight games from one prompt: 45 seconds with one subagent per game.</h1>
+      <p class="tag">A subagent is a helper Claude Code starts for one piece of a job. If you ask for one per task and say "all at once", they run at the same time. We gave Claude Code (Sonnet 5.5) the same eight-game job twice, once fanned out and once one after another, and timed both on 22 Oct 2026.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The prompt</h2>
+      <p>Make an empty folder, start Claude Code in it, and send:</p>
+      <pre><code>{prompt}</code></pre>
+      <p>Open any file in <code>games/</code> in a browser; add <code>?demo=1</code> to the address and it plays itself.</p></section>
+    <section class="card"><h2><span class="n">2</span> What we measured</h2>
+      <p>Claude Code 2.1.308, model Sonnet 5.5, one headless run per prompt in an empty folder. Cost is what Claude Code reported (API-equivalent list price; our runs used a subscription).</p>
+      <table><thead><tr><th>Run</th><th>Wall clock</th><th>API-equivalent cost</th><th>Games that loaded and played</th></tr></thead><tbody>
+        <tr><td>Eight subagents, all at once</td><td>0:45</td><td>$0.78</td><td>8 / 8</td></tr>
+        <tr><td>One agent, one after another</td><td>2:06</td><td>$0.38</td><td>8 / 8</td></tr></tbody></table>
+      <p>Fanning out was about 2.8 times faster and cost about twice as much. For comparison, the one-by-one prompt was:</p>
+      <pre><code>{seq}</code></pre></section>
+    <section class="card"><h2><span class="n">3</span> The eight games from the fan-out run</h2>
+      <p>Open each with the demo bot playing:</p>
+      <ul>{games.map(g => <li><a href={`/fanout/games/${g}.html?demo=1`}>{g}</a></li>)}</ul></section>
+    <section class="card"><h2><span class="n">4</span> Honest limits</h2>
+      <p>One run per prompt, small single-file games, and times that depend on API load. Fan-out trades tokens for time: it helps when the pieces are independent. It is not a claim about other tasks, other models, or Agent Teams / Agent View, which are different Claude Code features.</p></section>
+  </main>
+</BaseLayout>

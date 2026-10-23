@@ -1,0 +1,44 @@
+---
+// promptanddone.com/blender: the BLENDER pack (DM deliverable for the "claude-blender-scene" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const setup = 'uvx mcp-for-blender setup';
+const manual1 = 'claude mcp add blender uvx mcp-for-blender';
+const manual2 = 'uvx mcp-for-blender install-addon';
+const prompt = 'Build a snowy cabin at night in Blender: glowing windows, chimney smoke, pine trees, falling snow. Check your work in the viewport and fix what looks wrong. Then render it portrait, 1080x1920, with a slow 3 second push-in. Save the renders in the current folder.';
+const swaps = [
+  'Build a tiny desert gas station at sunset: neon sign, one parked pickup, long shadows, a slow 3 second push-in. Check your work in the viewport and fix what looks wrong, then render it portrait.',
+  'Build a cozy reading nook in Blender: armchair, lamp, bookshelf, rain on the window. Check the viewport, fix what looks off, then render a 1080x1920 still.',
+  'Inspect this scene and list collections, object counts and objects without materials. Then diagnose why my render comes out black.',
+];
+---
+<BaseLayout title="Claude + Blender: the setup — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · BLENDER pack</p>
+      <h1>One prompt. A whole scene, in free Blender.</h1>
+      <p class="tag">MCP for Blender (formerly blender-mcp, MIT, third-party and not made by Blender) lets Claude Code drive a live Blender. In our run it built, lit and rendered a snowy cabin, looked at its own viewport, and fixed a misplaced roof and missing pine trees.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Install</h2>
+      <p>You need Blender (free, <a href="https://www.blender.org/">blender.org</a>), Claude Code, and <a href="https://docs.astral.sh/uv/">uv</a>. One command finds your AI apps, installs the Blender add-on and enables it:</p>
+      <pre><code>{setup}</code></pre>
+      <p>Prefer manual? Add the server to Claude Code, install the add-on, then in Blender open Edit, Preferences, Add-ons and enable <b>Interface: MCP for Blender</b>:</p>
+      <pre><code>{manual1}</code></pre>
+      <pre><code>{manual2}</code></pre>
+      <p>Open Blender first, then start Claude Code. Repo and README: <a href="https://github.com/ahujasid/blender-mcp">github.com/ahujasid/blender-mcp</a> (now mcp-for-blender). Our versions: Claude Code 2.1.308, Opus 5.5, Blender 5.2.2 LTS, 22 Oct 2026.</p></section>
+    <section class="card"><h2><span class="n">2</span> The prompt from the reel</h2>
+      <pre><code>{prompt}</code></pre>
+      <p>Three more to try:</p>
+      <ul>{swaps.map(s => <li>{s}</li>)}</ul>
+      <p>The phrase that matters is the middle one: asking it to check the viewport and fix what looks wrong is what made it catch its own mistakes.</p></section>
+    <section class="card"><h2><span class="n">3</span> What we saw</h2>
+      <p>One run, 11 minutes 45 seconds from prompt to finished render (including a one-time consent dialog and two full 72-frame renders): 29 code runs and 17 viewport looks. Mistakes it caught itself: the roof sat off the walls, the pine trees showed in the viewport but not in the render (their template collection was set not to render), a chimney shadow looked like a glitch, and the first push-in cropped the smoke. Output: a 1080×1920 still and a 3-second MP4.</p></section>
+    <section class="card"><h2><span class="n">4</span> Good to know</h2>
+      <ul>
+        <li>A consent dialog about sharing session data appears once; it is off by default, leave the box unchecked.</li>
+        <li>There is no sandbox: the connector runs Python inside Blender. Save your file first and keep a backup.</li>
+        <li>Only one AI client can connect to a Blender session at a time.</li>
+        <li>It uses your Claude plan's usage; a run like ours is a few dollars of API-equivalent tokens. Results vary run to run.</li>
+        <li>Anthropic also ships an official Blender connector in Claude Desktop; the reel used the open-source MCP for Blender.</li>
+      </ul></section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+// promptanddone.com/refcheck: the REFCHECK pack (DM deliverable for the "ai-fake-citations-check" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const install = "npx skills add K-Dense-AI/scientific-agent-skills";
+const manual = "mkdir -p .claude/skills && cp -r scientific-agent-skills/skills/citation-management .claude/skills/";
+const prompt = "Use the citation-management skill to check every reference in refs.txt against Crossref and PubMed. Tell me which are real, which point to the wrong paper, which don't exist, and which are retracted. Then give me a corrected list I can safely cite.";
+const ask = "Write a short literature review (about 150 words) on <your topic>. End with a numbered reference list of 10 peer-reviewed papers in APA style, each with its DOI. Output only the review and the references.";
+const checker = "#!/usr/bin/env python3\n\"\"\"Independent citation check used for the reel test (not the skill's own code).\nFor every numbered reference line in a text file: pull the DOI, ask Crossref (does it exist, what title,\nany retraction notice) and OpenAlex (is_retracted), and compare the title with the one Claude wrote.\"\"\"\nimport json, re, sys, time, urllib.parse, urllib.request, difflib\nUA = {'User-Agent': 'promptanddone-citation-test/1.0 (mailto:hello@promptanddone.com)'}\ndef get(url):\n    for i in range(3):\n        try:\n            return json.load(urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25))\n        except urllib.error.HTTPError as e:\n            if e.code == 404: return None\n            time.sleep(2)\n        except Exception:\n            time.sleep(2)\n    return 'ERR'\ndef norm(s): return re.sub(r'[^a-z0-9 ]', '', s.lower())\ndef main(path):\n    out = []\n    for line in open(path):\n        m = re.match(r'\\s*(\\d+)\\.\\s+(.*)', line)\n        if not m: continue\n        n, body = m.groups()\n        d = re.search(r'10\\.\\d{4,9}/[^\\s<>\"]+', body)\n        doi = d.group(0).rstrip('.,;)') if d else None\n        t = re.search(r'\\(\\d{4}[a-z]?\\)\\.\\s+(.+?)\\.\\s+[\\*_A-Z]', body)\n        said = t.group(1) if t else body[:80]\n        row = dict(n=int(n), doi=doi, said=said, status='NO DOI')\n        if doi:\n            cr = get('https://api.crossref.org/works/' + urllib.parse.quote(doi))\n            if cr is None: row['status'] = 'FAKE (DOI does not exist)'\n            elif cr == 'ERR': row['status'] = 'UNKNOWN (network)'\n            else:\n                msg = cr['message']; real = (msg.get('title') or [''])[0]\n                row['real_title'] = real\n                row['sim'] = round(difflib.SequenceMatcher(None, norm(said), norm(real)).ratio(), 2)\n                row['status'] = 'REAL' if row['sim'] > .6 else 'MISMATCH (DOI is a different paper)'\n                row['crossref_retraction_flag'] = real.upper().startswith('RETRACTED') or any(u.get('type') == 'retraction' for u in msg.get('update-to', []) or []) or bool(msg.get('relation', {}).get('is-retracted-by'))\n                oa = get('https://api.openalex.org/works/doi:' + urllib.parse.quote(doi))\n                row['openalex_is_retracted'] = (oa or {}).get('is_retracted') if isinstance(oa, dict) else None\n                if row['crossref_retraction_flag'] or row['openalex_is_retracted']:\n                    row['status'] = 'RETRACTED' if row['status'] == 'REAL' else row['status'] + ' + RETRACTED'\n        out.append(row)\n    print(json.dumps(out, indent=1, ensure_ascii=False))\n    from collections import Counter\n    print(Counter(r['status'] for r in out), file=sys.stderr)\nmain(sys.argv[1])\n";
+---
+<BaseLayout title="Check every AI citation: the REFCHECK pack — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · REFCHECK pack</p>
+      <h1>Ten sources from Claude. One was retracted.</h1>
+      <p class="tag">Claude can hand you a reference list where every paper exists and one of them has been retracted, or where a link points at a different paper. A citation skill makes Claude look every reference up before you cite it.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The prompt</h2>
+      <p>Put your reference list (with DOIs) in <code>refs.txt</code>, start Claude Code in that folder, and send:</p>
+      <pre><code>{prompt}</code></pre>
+      <p>In our test Claude loaded the skill, then queried Crossref and PubMed itself with curl. It took 53 s and $0.18 (API-equivalent) for the 10 Sonnet references, 90 s and $0.23 for the 10 Haiku references. Any reference list with DOIs works, not only science.</p></section>
+    <section class="card"><h2><span class="n">2</span> Get the skill (free, MIT)</h2>
+      <pre><code>{install}</code></pre>
+      <p>That is the install line from the repo's README: <a href="https://github.com/K-Dense-AI/scientific-agent-skills">github.com/K-Dense-AI/scientific-agent-skills</a> (177 skills; we used <code>citation-management</code>, with <code>literature-review</code> and <code>paper-lookup</code> also in the folder). Manual install for Claude Code, as we did it:</p>
+      <pre><code>{manual}</code></pre></section>
+    <section class="card"><h2><span class="n">3</span> The test we ran (22 Oct 2026)</h2>
+      <p>No tools, no web, no skills: <code>claude -p --tools ""</code> with this prompt, six runs (Sonnet 5.5 and Haiku 5.5, three topics):</p>
+      <pre><code>{ask}</code></pre>
+      <p>We then looked up every DOI in Crossref and OpenAlex ourselves. Of 60 citations, 54 were real and correct, 2 were retracted (the same ChatGPT-in-education meta-analysis, retracted 22 April 2026), 2 had a DOI that does not exist, and 2 had a DOI that points at a different paper. Four of the six runs had at least one bad reference. With the skill, Claude flagged the retraction and fixed the wrong DOIs; both corrected lists re-checked clean (9 of 9 and 10 of 10).</p></section>
+    <section class="card"><h2><span class="n">4</span> The 60-line checker we used to double-check</h2>
+      <p>Independent of the skill: reads a numbered reference list, looks each DOI up in Crossref and OpenAlex and prints REAL, FAKE, MISMATCH or RETRACTED. Save as <code>check_refs.py</code> and run <code>python3 check_refs.py refs.txt</code>.</p>
+      <details><summary><code>check_refs.py</code></summary><pre><code>{checker}</code></pre></details></section>
+    <section class="card"><h2><span class="n">5</span> Honest limits</h2>
+      <p>This checks that a DOI exists, matches the title and has no retraction notice in Crossref or OpenAlex. It does not check that a paper supports the sentence it is cited for; read the papers you rely on. Crossref does not capture every retraction. Six runs on three topics is a small test, not a rate: most references were fine. The skill's own scripts check DOI registration only; the retraction catch came from Claude reading Crossref's records.</p></section>
+  </main>
+</BaseLayout>

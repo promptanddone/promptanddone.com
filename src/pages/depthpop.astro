@@ -1,0 +1,84 @@
+---
+// promptanddone.com/depthpop: the DEPTHPOP pack (DM deliverable for the "photo-to-3d-depth-anything" reel). Prepared 22 Oct 2026, NOT deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const setup = 'python3 -m venv pop && source pop/bin/activate\npip install onnxruntime numpy pillow opencv-python-headless\n# ffmpeg must be on your PATH (macOS: brew install ffmpeg)';
+const run = 'python3 photo3d.py my_photo.jpg\n# -> my_photo_depth.png (the depth map) and my_photo_3d.mp4 (a 5 s looping 3D move)';
+const script = `#!/usr/bin/env python3
+"""photo3d.py: turn one photo into a depth map and a looping 3D-parallax video, offline, on the CPU.
+
+Model: Depth Anything V2 Small (Apache-2.0), ONNX build from onnx-community/depth-anything-v2-small (99 MB).
+Setup:  pip install onnxruntime numpy pillow opencv-python-headless    (and ffmpeg on your PATH)
+Run:    python3 photo3d.py my_photo.jpg            -> my_photo_depth.png, my_photo_3d.mp4
+"""
+import math, os, subprocess, sys, time, urllib.request
+import numpy as np, onnxruntime as ort, cv2
+from PIL import Image
+
+MODEL_URL = "https://huggingface.co/onnx-community/depth-anything-v2-small/resolve/main/onnx/model.onnx"
+MODEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "depth_anything_v2_small.onnx")
+MEAN = np.array([0.485, 0.456, 0.406], np.float32); STD = np.array([0.229, 0.224, 0.225], np.float32)
+
+
+def depth_map(sess, im):
+    W, H = im.size; s = 518
+    w, h = (int(round(W * s / H / 14)) * 14, s) if W >= H else (s, int(round(H * s / W / 14)) * 14)
+    x = (np.asarray(im.resize((w, h), Image.BICUBIC), np.float32) / 255. - MEAN) / STD
+    d = sess.run(None, {sess.get_inputs()[0].name: x.transpose(2, 0, 1)[None]})[0][0]
+    d = (d - d.min()) / (d.max() - d.min() + 1e-9)
+    return cv2.resize(d, (W, H), interpolation=cv2.INTER_CUBIC).clip(0, 1)
+
+
+def parallax(img, depth, n=150, amp=0.035, zoom=0.05, fps=30):
+    """Camera drifts in a small circle: near pixels move more than far ones."""
+    H, W = depth.shape
+    d = cv2.GaussianBlur(cv2.dilate(depth, np.ones((5, 5), np.uint8)), (0, 0), 1.2)   # soften edges, less tearing
+    gx, gy = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
+    for i in range(n):
+        a = 2 * math.pi * i / n
+        sx, sy = math.cos(a) * amp * W, math.sin(a) * amp * W * 0.6
+        z = zoom * (0.5 - 0.5 * math.cos(a))                                  # slow push-in and back
+        f = d - 0.5
+        mx = gx + sx * f + (gx - W / 2) * z * (0.2 + f)
+        my = gy + sy * f + (gy - H / 2) * z * (0.2 + f)
+        yield cv2.remap(img, mx.astype(np.float32), my.astype(np.float32), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+
+
+def main(path):
+    if not os.path.exists(MODEL):
+        print("downloading the model (99 MB, once)..."); urllib.request.urlretrieve(MODEL_URL, MODEL)
+    sess = ort.InferenceSession(MODEL, providers=["CPUExecutionProvider"])
+    im = Image.open(path).convert("RGB"); t = time.time(); depth = depth_map(sess, im)
+    print("depth map: %.2f s" % (time.time() - t))
+    base = os.path.splitext(path)[0]
+    Image.fromarray((depth * 255).astype(np.uint8)).save(base + "_depth.png")
+    img = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR); H, W = depth.shape
+    p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{W//2*2}x{H//2*2}", "-r", "30",
+                          "-i", "-", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "16", base + "_3d.mp4"], stdin=subprocess.PIPE)
+    for fr in parallax(img, depth): p.stdin.write(np.ascontiguousarray(fr[:H//2*2, :W//2*2]).tobytes())
+    p.stdin.close(); p.wait(); print("wrote", base + "_depth.png", base + "_3d.mp4")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1])
+`;
+const rows = [['One photo (1080 px), depth map', '0.28 s'], ['14 photos, depth maps only (decode + save included)', '4.0 s'], ['One photo, depth map + 5 s parallax video', 'about 12 s, mostly video encoding']];
+---
+<BaseLayout title="DEPTHPOP: photo to 3D scene, free and offline — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · DEPTHPOP pack</p>
+      <h1>One photo, a 3D scene. Free, offline, on your CPU.</h1>
+      <p class="tag">The model is <a href="https://github.com/DepthAnything/Depth-Anything-V2">Depth Anything V2 Small</a> (HKU + TikTok researchers, Apache-2.0; the Base/Large models are CC-BY-NC, so use Small). It guesses how far away every pixel is. The script below turns that depth map into a looping 3D camera move.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Set up (once)</h2><pre><code>{setup}</code></pre>
+      <p>The first run downloads the 99 MB ONNX model from <a href="https://huggingface.co/onnx-community/depth-anything-v2-small">onnx-community/depth-anything-v2-small</a> next to the script.</p></section>
+    <section class="card"><h2><span class="n">2</span> Run it</h2><pre><code>{run}</code></pre>
+      <p>Bright pixels in the depth map are near, dark pixels are far. Use the PNG for relief engraving or a 3D viewer, the MP4 for posting.</p></section>
+    <section class="card"><h2><span class="n">3</span> Our test (22 Oct 2026, Apple M4 Pro, CPU only)</h2>
+      <table><thead><tr><th>Job</th><th>Time</th></tr></thead><tbody>{rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table>
+      <p>14 CC0 photos from Unsplash (mirrored on Wikimedia Commons). Your machine will differ.</p></section>
+    <section class="card"><h2><span class="n">4</span> photo3d.py</h2><pre><code>{script}</code></pre></section>
+    <section class="card"><h2><span class="n">5</span> Fair to say</h2>
+      <p>The depth is relative, not metric, and it is one view of the scene: hidden areas are guessed, so keep the camera move small (a few degrees). Thin wires and glass are approximate. This makes a 2.5D scene from a photo, not a full 3D model.</p></section>
+  </main>
+</BaseLayout>

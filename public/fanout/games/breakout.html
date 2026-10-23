@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Breakout</title>
+<style>
+html,body{margin:0;height:100%;background:#0b0e1a;display:flex;align-items:center;justify-content:center}
+canvas{width:360px;height:640px;background:#11152a;border-radius:8px;box-shadow:0 0 40px #0008;touch-action:none;cursor:none}
+</style></head><body>
+<canvas id="c" width="360" height="640"></canvas>
+<script>
+const demo=/[?&]demo=1/.test(location.search);
+const cv=document.getElementById('c'),g=cv.getContext('2d'),W=360,H=640;
+const COLS=8,ROWS=6,BW=40,BH=16,PAD=4,OX=(W-COLS*BW)/2,OY=70;
+const colors=['#ff5d73','#ff9f5d','#ffd25d','#6be585','#5dc8ff','#a78bff'];
+let bricks,pad,ball,score,lives,state,keys={},best=0,timer=0;
+function reset(){
+  bricks=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)bricks.push({x:OX+c*BW,y:OY+r*(BH+PAD),r,alive:true});
+  pad={x:W/2-34,w:68,h:10,y:600};score=0;lives=3;state='play';serve();
+}
+function serve(){
+  const a=-Math.PI/2+(Math.random()-.5)*.8,s=5;
+  ball={x:pad.x+pad.w/2,y:pad.y-8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:6,wait:40};
+}
+function setPad(x){pad.x=Math.max(0,Math.min(W-pad.w,x-pad.w/2))}
+addEventListener('keydown',e=>{keys[e.key]=1;if(e.key==' '||e.key=='Enter')restart();if(e.key.startsWith('Arrow'))e.preventDefault()});
+addEventListener('keyup',e=>keys[e.key]=0);
+function px(e){const b=cv.getBoundingClientRect();return (e.clientX-b.left)*W/b.width}
+cv.addEventListener('mousemove',e=>{if(!demo&&state=='play')setPad(px(e))});
+cv.addEventListener('pointerdown',e=>{if(state!='play')restart();else if(!demo)setPad(px(e))});
+cv.addEventListener('pointermove',e=>{if(!demo&&e.buttons&&state=='play')setPad(px(e))});
+function restart(){if(state!='play')reset()}
+function step(){
+  if(state!='play'){if(demo&&++timer>120){timer=0;reset()}return}
+  if(demo)pad.x+=((Math.max(0,Math.min(W-pad.w,ball.x-pad.w/2+Math.sin(ball.x*.1)*10)))-pad.x)*.25;
+  else{if(keys.ArrowLeft)pad.x=Math.max(0,pad.x-7);if(keys.ArrowRight)pad.x=Math.min(W-pad.w,pad.x+7)}
+  if(ball.wait>0){ball.wait--;ball.x=pad.x+pad.w/2;return}
+  ball.x+=ball.vx;ball.y+=ball.vy;
+  if(ball.x<ball.r){ball.x=ball.r;ball.vx=Math.abs(ball.vx)}
+  if(ball.x>W-ball.r){ball.x=W-ball.r;ball.vx=-Math.abs(ball.vx)}
+  if(ball.y<ball.r){ball.y=ball.r;ball.vy=Math.abs(ball.vy)}
+  if(ball.vy>0&&ball.y+ball.r>=pad.y&&ball.y+ball.r<=pad.y+pad.h+8&&ball.x>=pad.x-4&&ball.x<=pad.x+pad.w+4){
+    const t=(ball.x-pad.x)/pad.w-.5,s=Math.min(9,Math.hypot(ball.vx,ball.vy)*1.01),a=t*Math.PI*.7;
+    ball.vx=Math.sin(a)*s;ball.vy=-Math.cos(a)*s;ball.y=pad.y-ball.r;
+  }
+  for(const b of bricks){
+    if(!b.alive)continue;
+    if(ball.x+ball.r>b.x&&ball.x-ball.r<b.x+BW&&ball.y+ball.r>b.y&&ball.y-ball.r<b.y+BH){
+      b.alive=false;score+=10*(ROWS-b.r);
+      const ox=Math.min(ball.x+ball.r-b.x,b.x+BW-(ball.x-ball.r)),oy=Math.min(ball.y+ball.r-b.y,b.y+BH-(ball.y-ball.r));
+      if(ox<oy)ball.vx*=-1;else ball.vy*=-1;break;
+    }
+  }
+  if(!bricks.some(b=>b.alive)){state='win';best=Math.max(best,score)}
+  if(ball.y>H+10){if(--lives<=0){state='over';best=Math.max(best,score)}else serve()}
+}
+function rr(x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}
+function draw(){
+  g.clearRect(0,0,W,H);
+  for(const b of bricks)if(b.alive){g.fillStyle=colors[b.r];rr(b.x+1,b.y,BW-2,BH,3)}
+  g.fillStyle='#e8ecff';rr(pad.x,pad.y,pad.w,pad.h,5);
+  g.beginPath();g.arc(ball.x,ball.y,ball.r,0,7);g.fillStyle='#fff';g.shadowColor='#8cf';g.shadowBlur=12;g.fill();g.shadowBlur=0;
+  g.font='bold 16px system-ui,sans-serif';g.fillStyle='#cfd6ff';g.textAlign='left';g.fillText('Score '+score,14,30);
+  g.textAlign='right';g.fillText('Lives '+'♥'.repeat(Math.max(0,lives)),W-14,30);
+  if(demo){g.textAlign='center';g.fillStyle='#8890b8';g.font='12px system-ui';g.fillText('DEMO',W/2,30)}
+  if(state!='play'){
+    g.fillStyle='#000a';g.fillRect(0,0,W,H);g.textAlign='center';
+    g.fillStyle=state=='win'?'#6be585':'#ff5d73';g.font='bold 40px system-ui';
+    g.fillText(state=='win'?'YOU WIN!':'GAME OVER',W/2,290);
+    g.fillStyle='#fff';g.font='18px system-ui';g.fillText('Score '+score+'  ·  Best '+best,W/2,325);
+    g.fillStyle='#9aa3d6';g.font='14px system-ui';g.fillText('Tap or press Space to restart',W/2,360);
+  }
+}
+reset();
+(function loop(){step();draw();requestAnimationFrame(loop)})();
+</script></body></html>

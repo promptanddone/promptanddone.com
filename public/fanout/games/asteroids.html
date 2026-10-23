@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Asteroids</title>
+<style>
+html,body{margin:0;height:100%;background:#05060a;color:#9ef;font-family:monospace;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+body{display:flex;align-items:center;justify-content:center}
+#wrap{position:relative;width:360px;height:640px}
+canvas{display:block;width:360px;height:640px;background:#05060a;box-shadow:0 0 24px #0af4}
+#pad{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:space-between;padding:0 10px;pointer-events:none}
+#pad div{display:flex;gap:8px}
+#pad button{pointer-events:auto;width:56px;height:56px;border-radius:50%;border:2px solid #9ef8;background:#0af2;color:#9ef;font:bold 20px monospace;touch-action:none}
+#pad button.on{background:#0af6}
+</style></head><body>
+<div id="wrap"><canvas id="c" width="360" height="640"></canvas>
+<div id="pad"><div><button data-k="ArrowLeft">&#9664;</button><button data-k="ArrowRight">&#9654;</button></div>
+<div><button data-k="ArrowUp">&#9650;</button><button data-k=" ">&#9679;</button></div></div></div>
+<script>
+const W=360,H=640,cv=document.getElementById('c'),g=cv.getContext('2d');
+const demo=/[?&]demo=1/.test(location.search);
+const keys={};
+addEventListener('keydown',e=>{keys[e.key]=1;if(e.key.startsWith('Arrow')||e.key==' ')e.preventDefault();if(over&&(e.key==' '||e.key=='Enter'))start()});
+addEventListener('keyup',e=>keys[e.key]=0);
+document.querySelectorAll('#pad button').forEach(b=>{
+ const k=b.dataset.k,d=e=>{e.preventDefault();keys[k]=1;b.classList.add('on');if(over)start()},u=e=>{e.preventDefault();keys[k]=0;b.classList.remove('on')};
+ b.addEventListener('pointerdown',d);['pointerup','pointercancel','pointerleave'].forEach(n=>b.addEventListener(n,u));
+});
+cv.addEventListener('pointerdown',()=>{if(over)start()});
+let ship,rocks,bullets,parts,score,lives,level,over,cool,inv,best=0,overT=0,t=0;
+const R=Math.random,TAU=Math.PI*2;
+function start(){score=0;lives=3;level=0;over=false;bullets=[];parts=[];rocks=[];newShip();nextLevel()}
+function newShip(){ship={x:W/2,y:H/2,vx:0,vy:0,a:-Math.PI/2};inv=120;cool=0}
+function nextLevel(){level++;for(let i=0;i<3+level;i++){let x,y;do{x=R()*W;y=R()*H}while(Math.hypot(x-ship.x,y-ship.y)<130);rock(x,y,3)}}
+function rock(x,y,s){const sp=(0.5+R()*0.8)*(1+(4-s)*0.4),a=R()*TAU,r=s*11+2,n=9,sh=[];
+ for(let i=0;i<n;i++)sh.push(r*(0.75+R()*0.5));
+ rocks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,s,r,sh,a:R()*TAU,va:(R()-.5)*.05})}
+function boom(x,y,n,c){for(let i=0;i<n;i++){const a=R()*TAU,s=R()*3;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:20+R()*25,c})}}
+const wrap=o=>{o.x=(o.x+W)%W;o.y=(o.y+H)%H};
+function ai(){ // returns virtual keys
+ const k={};if(!ship)return k;
+ let best=null,bd=1e9;
+ for(const r of rocks){const d=Math.hypot(r.x-ship.x,r.y-ship.y);if(d<bd){bd=d;best=r}}
+ if(!best)return k;
+ const dist=bd,tt=dist/6,px=best.x+best.vx*tt,py=best.y+best.vy*tt;
+ let da=Math.atan2(py-ship.y,px-ship.x)-ship.a;da=Math.atan2(Math.sin(da),Math.cos(da));
+ if(da>0.08)k.ArrowRight=1;else if(da<-0.08)k.ArrowLeft=1;
+ if(Math.abs(da)<0.25)k[' ']=1;
+ const sp=Math.hypot(ship.vx,ship.vy);
+ if(dist<90){ // flee: thrust away-ish
+  if(sp<2.2&&Math.abs(da)>2.2)k.ArrowUp=1;
+ } else if(sp<0.6&&dist>150&&Math.abs(da)<.3)k.ArrowUp=1;
+ return k}
+function update(){
+ t++;
+ if(over){overT++;if(demo&&overT>120)start();return}
+ const k=demo?ai():keys;
+ if(inv>0)inv--;
+ if(ship){
+  if(k.ArrowLeft)ship.a-=.075;if(k.ArrowRight)ship.a+=.075;
+  if(k.ArrowUp){ship.vx+=Math.cos(ship.a)*.12;ship.vy+=Math.sin(ship.a)*.12;
+   if(t%2)parts.push({x:ship.x-Math.cos(ship.a)*9,y:ship.y-Math.sin(ship.a)*9,vx:-Math.cos(ship.a)*2+(R()-.5),vy:-Math.sin(ship.a)*2+(R()-.5),l:12,c:'#fa4'})}
+  ship.vx*=.992;ship.vy*=.992;ship.x+=ship.vx;ship.y+=ship.vy;wrap(ship);
+  if(cool>0)cool--;
+  if(k[' ']&&cool<=0&&bullets.length<6){cool=12;bullets.push({x:ship.x+Math.cos(ship.a)*12,y:ship.y+Math.sin(ship.a)*12,vx:Math.cos(ship.a)*6+ship.vx,vy:Math.sin(ship.a)*6+ship.vy,l:55})}
+ }
+ for(const b of bullets){b.x+=b.vx;b.y+=b.vy;wrap(b);b.l--}
+ bullets=bullets.filter(b=>b.l>0);
+ for(const r of rocks){r.x+=r.vx;r.y+=r.vy;r.a+=r.va;wrap(r)}
+ for(const b of bullets)for(const r of rocks){
+  if(!r.dead&&b.l>0&&Math.hypot(b.x-r.x,b.y-r.y)<r.r){
+   b.l=0;r.dead=1;score+=[0,100,50,20][r.s];boom(r.x,r.y,8+r.s*4,'#9ef');
+   if(r.s>1){rock(r.x,r.y,r.s-1);rock(r.x,r.y,r.s-1)}}}
+ rocks=rocks.filter(r=>!r.dead);
+ if(ship&&inv<=0)for(const r of rocks)if(Math.hypot(r.x-ship.x,r.y-ship.y)<r.r+6){
+  boom(ship.x,ship.y,30,'#fff');ship=null;lives--;
+  if(lives<=0){over=true;overT=0;best=Math.max(best,score)}else setTimeout(()=>{if(!over&&!ship)newShip()},900);
+  break}
+ for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.l--}
+ parts=parts.filter(p=>p.l>0);
+ if(!rocks.length&&!over)nextLevel();
+}
+function draw(){
+ g.fillStyle='#05060a';g.fillRect(0,0,W,H);
+ g.lineWidth=1.8;g.lineJoin='round';
+ g.shadowColor='#0cf';g.shadowBlur=6;
+ g.strokeStyle='#9ef';
+ for(const r of rocks){g.beginPath();const n=r.sh.length;
+  for(let i=0;i<=n;i++){const a=r.a+i/n*TAU,d=r.sh[i%n];g.lineTo(r.x+Math.cos(a)*d,r.y+Math.sin(a)*d)}
+  g.stroke()}
+ if(ship&&(inv<=0||(inv>>2)%2)){g.save();g.translate(ship.x,ship.y);g.rotate(ship.a);g.strokeStyle='#fff';
+  g.beginPath();g.moveTo(12,0);g.lineTo(-9,-7);g.lineTo(-5,0);g.lineTo(-9,7);g.closePath();g.stroke();g.restore()}
+ g.fillStyle='#ff8';
+ for(const b of bullets)g.fillRect(b.x-1.5,b.y-1.5,3,3);
+ for(const p of parts){g.globalAlpha=Math.min(1,p.l/15);g.fillStyle=p.c;g.fillRect(p.x-1,p.y-1,2,2)}
+ g.globalAlpha=1;g.shadowBlur=0;
+ g.fillStyle='#9ef';g.font='bold 18px monospace';g.textAlign='left';g.fillText(String(score).padStart(5,'0'),12,26);
+ g.textAlign='right';g.fillText('HI '+String(best).padStart(5,'0'),W-12,26);
+ for(let i=0;i<lives;i++){g.save();g.translate(20+i*18,46);g.rotate(-Math.PI/2);g.strokeStyle='#fff';g.beginPath();g.moveTo(7,0);g.lineTo(-5,-4);g.lineTo(-3,0);g.lineTo(-5,4);g.closePath();g.stroke();g.restore()}
+ if(over){g.fillStyle='#000a';g.fillRect(0,0,W,H);g.textAlign='center';g.fillStyle='#fff';
+  g.font='bold 34px monospace';g.fillText('GAME OVER',W/2,H/2-30);
+  g.font='16px monospace';g.fillStyle='#9ef';g.fillText('Score '+score,W/2,H/2+4);
+  if(!demo&&(t>>5)%2==0)g.fillText('Space / tap to restart',W/2,H/2+40)}
+}
+start();
+(function loop(){update();draw();requestAnimationFrame(loop)})();
+</script></body></html>

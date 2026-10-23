@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Runner</title>
+<style>html,body{margin:0;height:100%;background:#111;display:flex;align-items:center;justify-content:center}
+canvas{width:360px;height:640px;max-height:100vh;touch-action:none;display:block}</style></head>
+<body><canvas id="c" width="360" height="640"></canvas>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d'),W=360,H=640,G=520,demo=/[?&]demo=1/.test(location.search);
+const GR=0.78*H|0, GRAV=2600, JV=-900;
+let p,obs,speed,dist,best=+localStorage.runnerBest||0,state,t0,spawn,clouds=[],tick=0,restartAt=0;
+for(let i=0;i<5;i++)clouds.push({x:Math.random()*W,y:60+Math.random()*200,s:.2+Math.random()*.3});
+function reset(){p={x:70,y:GR-48,w:34,h:48,vy:0,air:false,duck:false};obs=[];speed=300;dist=0;spawn=1;state='play';}
+function jump(){if(state==='over'){if(performance.now()>restartAt)reset();return}
+ if(!p.air){p.vy=JV;p.air=true}}
+addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();if(!demo)jump()}
+ if(e.code==='ArrowDown')p.duck=true});
+addEventListener('keyup',e=>{if(e.code==='ArrowDown')p.duck=false});
+c.addEventListener('pointerdown',e=>{e.preventDefault();if(!demo)jump()});
+function addObs(){const r=Math.random();
+ if(r<.3&&dist>150)obs.push({x:W+20,w:40,h:22,y:GR-78,bird:true});
+ else{const n=1+(Math.random()*3>2.2|0),h=34+Math.random()*30|0;obs.push({x:W+20,w:18*n,h,y:GR-h,cactus:true})}}
+function hb(){const h=p.duck&&!p.air?28:p.h;return{x:p.x+4,y:p.y+p.h-h+4,w:p.w-8,h:h-8}}
+function ai(){ // jump cacti / duck-less: jump birds too is impossible, so duck
+ const n=obs.find(o=>o.x+o.w>p.x);p.duck=false;if(!n)return;
+ const d=n.x-(p.x+p.w),trig=speed*0.25+10;
+ if(n.bird){p.duck=d<speed*.3&&n.x+n.w>p.x-10}
+ else if(d<trig&&d>0&&!p.air){p.vy=JV;p.air=true}}
+function update(dt){
+ if(state!=='play')return;
+ if(demo)ai();
+ speed=Math.min(760,speed+dt*8);dist+=speed*dt/20;
+ p.vy+=GRAV*dt;p.y+=p.vy*dt;
+ if(p.y>=GR-p.h){p.y=GR-p.h;p.vy=0;p.air=false}
+ spawn-=dt;if(spawn<=0){addObs();spawn=(.9+Math.random()*.9)*(300/speed)+.45}
+ for(const o of obs)o.x-=speed*dt;
+ obs=obs.filter(o=>o.x+o.w>-10);
+ const a=hb();
+ for(const o of obs)if(a.x<o.x+o.w&&a.x+a.w>o.x&&a.y<o.y+o.h&&a.y+a.h>o.y){
+  state='over';restartAt=performance.now()+400;
+  if(dist>best){best=dist;try{localStorage.runnerBest=best|0}catch(e){}}
+  if(demo)setTimeout(reset,1200);}
+ for(const k of clouds){k.x-=k.s*speed*dt*.3;if(k.x<-60)k.x=W+40}
+}
+function draw(){
+ const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#bfe3f5');g.addColorStop(1,'#f4ecd8');
+ x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.fillStyle='rgba(255,255,255,.85)';
+ for(const k of clouds){x.beginPath();x.ellipse(k.x,k.y,34,11,0,0,7);x.ellipse(k.x+16,k.y-8,20,10,0,0,7);x.fill()}
+ x.fillStyle='#8a7a5a';x.fillRect(0,GR,W,H-GR);
+ x.fillStyle='#5a4e38';x.fillRect(0,GR,W,3);
+ const off=(dist*20)%60;x.fillStyle='#6f6246';
+ for(let i=-1;i<8;i++){x.fillRect(i*60-off,GR+20+(i&1)*18,18,3)}
+ // player
+ const ducking=p.duck&&!p.air,h=ducking?28:p.h,w=ducking?46:p.w,py=p.y+p.h-h;
+ x.fillStyle='#2b2b3a';x.fillRect(p.x,py,w,h);
+ x.fillStyle='#fff';x.fillRect(p.x+w-14,py+6,8,8);x.fillStyle='#000';x.fillRect(p.x+w-9,py+8,4,4);
+ x.fillStyle='#e0584c';x.fillRect(p.x-6,py+4,8,6);
+ if(!p.air&&state==='play'){const f=(dist/3|0)&1;x.fillStyle='#2b2b3a';x.fillRect(p.x+(f?4:18),py+h,10,4)}
+ for(const o of obs){
+  if(o.bird){x.fillStyle='#7b3f8c';x.fillRect(o.x,o.y+8,o.w,10);
+   const f=(tick/8|0)&1;x.fillRect(o.x+10,o.y+(f?-4:14),18,8);x.fillStyle='#f3b63f';x.fillRect(o.x-8,o.y+11,8,4)}
+  else{x.fillStyle='#2f7d45';const n=o.w/18;for(let i=0;i<n;i++){const hh=o.h-(i%2)*8;x.fillRect(o.x+i*18+3,o.y+o.h-hh,12,hh);}
+   x.fillRect(o.x,o.y+o.h-o.h*.6,o.w,5)}}
+ x.fillStyle='#222';x.font='bold 22px monospace';x.textAlign='right';
+ x.fillText(String(dist|0).padStart(5,'0'),W-16,34);
+ x.font='14px monospace';x.fillStyle='#555';x.fillText('HI '+String(best|0).padStart(5,'0'),W-16,54);
+ x.textAlign='center';
+ if(demo){x.fillStyle='rgba(0,0,0,.45)';x.font='12px monospace';x.textAlign='left';x.fillText('DEMO',16,30);x.textAlign='center'}
+ if(state==='over'){x.fillStyle='rgba(0,0,0,.45)';x.fillRect(0,0,W,H);
+  x.fillStyle='#fff';x.font='bold 36px monospace';x.fillText('GAME OVER',W/2,H/2-10);
+  x.font='16px monospace';x.fillText('Score '+(dist|0),W/2,H/2+20);
+  if(!demo)x.fillText('Space / tap to restart',W/2,H/2+50)}
+}
+let last=performance.now();
+function loop(n){const dt=Math.min(.033,(n-last)/1000);last=n;tick++;update(dt);draw();requestAnimationFrame(loop)}
+reset();
+if(!demo){state='over';restartAt=0;dist=0}
+requestAnimationFrame(loop);
+</script></body></html>

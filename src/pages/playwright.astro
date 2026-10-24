@@ -1,0 +1,40 @@
+---
+// promptanddone.com/playwright: the PLAYWRIGHT pack (DM deliverable for the "claude-browser-form-fill" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const setup = 'claude mcp add playwright npx @playwright/mcp@latest';
+const prompt = 'Fill in the form at THE-FORM-URL using this email. Go through every step. Stop on the Review page and do not submit.';
+const email = `Subject: Re: Maple Court, yes we want the 2 bed!
+
+Hi Dana,
+
+I'm Maya Okafor (born 14 April 1992). Best email is maya.okafor@example.com, my cell is 612 555 0147 and honestly text is easiest. ID is my Minnesota driver license.
+
+We're at 418 Linden Street, Minneapolis, MN 55408 right now. Been there three years, paying $1,450 a month. I work at Northwind Bikes as a Logistics Lead, started 6 March 2023, and I make $5,200 a month before tax.
+
+We'd like the 2 bedroom, 12 month lease, moving in on 1 December 2026. It's me, my partner Theo and our daughter, so 3 people. We have one dog, Biscuit, a beagle, about 24 pounds. Parking please, and the bike room.
+
+References: my old landlord Jim Alvarez, 651 555 0132. Also my manager Priya Nair, 612 555 0199.
+Emergency contact is my sister Ada Okafor on 612 555 0111.
+
+Yes to the background and credit check, everything above is true. Sign it as Maya Okafor.`;
+---
+<BaseLayout title="Claude fills a web form from one email: Playwright MCP — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · PLAYWRIGHT pack</p>
+      <h1>One pasted email, one filled-in form. Here's the setup and the prompt.</h1>
+      <p class="tag"><a href="https://github.com/microsoft/playwright-mcp">Playwright MCP</a> is a free (Apache-2.0) tool from Microsoft that lets an AI drive a real browser through the page's accessibility snapshot. You need Claude Code on a plan, and Node.js for the one-line install.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Add it to Claude Code</h2>
+      <pre><code>{setup}</code></pre>
+      <p>Then start Claude Code as usual. The browser tools appear as <code>mcp__playwright__*</code>.</p></section>
+    <section class="card"><h2><span class="n">2</span> The prompt</h2>
+      <pre><code>{prompt}</code></pre>
+      <p>Paste your own email or notes under it. Swap the URL for the form. The last two sentences are the safety net: Claude stops on Review and you press Submit yourself.</p></section>
+    <section class="card"><h2><span class="n">3</span> The email we used</h2>
+      <pre><code>{email}</code></pre></section>
+    <section class="card"><h2><span class="n">4</span> What we measured</h2>
+      <p>Tested 22 Oct 2026 with Claude Code 2.1.308 on Sonnet 5.5 and Playwright MCP 0.0.83, on our own 35-field sample rental form (4 pages plus Review, dropdowns, a stepper, a pet toggle, an Add-another-reference button). 5 of 5 runs filled all 35 fields in 49 to 76 seconds, for $0.15 to $0.21 each (API-equivalent). We checked every field value of one run against the email; Submit was never touched. The three judgement calls were labels the email never named (Former landlord, Manager) and the pet type.</p>
+      <p class="note">Fair to say: our own form, no login, no CAPTCHA, headless Chrome. Real sites vary. Try it on a throwaway form first and never point it at accounts you can't afford to get wrong.</p></section>
+  </main>
+</BaseLayout>

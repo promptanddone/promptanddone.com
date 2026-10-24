@@ -1,0 +1,135 @@
+---
+// promptanddone.com/pushy: the PUSHY pack (DM deliverable for the "claude-skill-pushy-description" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const sentence = String.raw`<your plain description> Make sure to use this skill whenever the user mentions <topics>, even if they don't explicitly ask for <thing>.`;
+const example = String.raw`---
+name: commit-message
+description: How to write a clear git commit message. Make sure to use this skill whenever the user mentions commits, commit messages, staging changes, or summarizing what was just changed in code, even if they don't explicitly ask for a 'commit message'.
+---`;
+const harness = String.raw`#!/usr/bin/env python3
+"""Skill trigger test: do plain vs pushy skill descriptions get loaded?
+usage: run_trigger_test.py MODEL VARIANT[,VARIANT] [--reps N] [--workers N] [--out DIR]
+Each variant installs the 8 skills (same bodies, different descriptions) in a temp project, then sends
+every prompt to claude -p with only Skill/Read/Glob/Grep tools and records whether the first reply loads a skill."""
+import json, os, shutil, subprocess, sys, tempfile, concurrent.futures as cf, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+D = json.load(open(os.path.join(HERE, 'skills.json')))
+model, variants = sys.argv[1], sys.argv[2].split(',')
+reps = int(sys.argv[sys.argv.index('--reps') + 1]) if '--reps' in sys.argv else 1
+workers = int(sys.argv[sys.argv.index('--workers') + 1]) if '--workers' in sys.argv else 6
+out = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else os.path.join(HERE, 'results')
+os.makedirs(out, exist_ok=True)
+
+def desc(s, v):
+    if v == 'plain': return s['plain']
+    if v == 'pushy': return f"{s['plain']} Make sure to use this skill whenever the user mentions {s['triggers']}, even if they don't explicitly ask for {s['also']}."
+    raise SystemExit('unknown variant ' + v)
+
+def make_project(v):
+    p = tempfile.mkdtemp(prefix=f'pd-skill-{v}-')
+    for s in D['skills']:
+        d = os.path.join(p, '.claude', 'skills', s['name']); os.makedirs(d)
+        open(os.path.join(d, 'SKILL.md'), 'w').write(f"---\nname: {s['name']}\ndescription: {desc(s, v)}\n---\n\n{s['body']}\n")
+    subprocess.run(['git', 'init', '-q'], cwd=p)
+    return p
+
+def run_one(job):
+    proj, kind, want, prompt, rep = job
+    t0 = time.time()
+    r = subprocess.run(['claude', '-p', prompt, '--model', model, '--setting-sources', 'project', '--strict-mcp-config',
+                        '--tools', 'Skill,Read,Glob,Grep', '--max-turns', '2', '--output-format', 'stream-json', '--verbose',
+                        '--dangerously-skip-permissions'], cwd=proj, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=240)
+    loaded, cost = [], 0
+    for l in r.stdout.splitlines():
+        try: e = json.loads(l)
+        except Exception: continue
+        if e.get('type') == 'assistant':
+            for c in e['message'].get('content', []):
+                if c.get('type') == 'tool_use' and c.get('name') == 'Skill': loaded.append(c['input'].get('skill') or c['input'].get('command'))
+        if e.get('type') == 'result': cost = e.get('total_cost_usd') or 0
+    return {'kind': kind, 'want': want, 'prompt': prompt, 'rep': rep, 'loaded': loaded, 'cost': cost, 'secs': round(time.time() - t0, 1)}
+
+for v in variants:
+    proj = make_project(v)
+    jobs = [(proj, 'pos', s['name'], pr, rep) for s in D['skills'] for pr in s['prompts'] for rep in range(reps)]
+    jobs += [(proj, 'neg', None, pr, rep) for pr in D['negatives'] for rep in range(reps)]
+    with cf.ThreadPoolExecutor(workers) as ex: res = list(ex.map(run_one, jobs))
+    json.dump({'model': model, 'variant': v, 'results': res}, open(os.path.join(out, f'{model}-{v}.json'), 'w'), indent=1)
+    pos = [r for r in res if r['kind'] == 'pos']; neg = [r for r in res if r['kind'] == 'neg']
+    hit = sum(1 for r in pos if r['want'] in r['loaded']); anyl = sum(1 for r in pos if r['loaded']); fp = sum(1 for r in neg if r['loaded'])
+    print(f"{model} {v}: right skill {hit}/{len(pos)}  any skill {anyl}/{len(pos)}  false triggers {fp}/{len(neg)}  cost USD {sum(r['cost'] for r in res):.2f}", flush=True)
+    shutil.rmtree(proj, ignore_errors=True)
+`;
+const sample = String.raw`{
+ "skills": [
+  {
+   "name": "commit-message",
+   "plain": "How to write a clear git commit message.",
+   "triggers": "commits, commit messages, staging changes, or summarizing what was just changed in code",
+   "also": "a 'commit message'",
+   "body": "Write the commit as: a subject line of 50 characters or fewer in the imperative mood, a blank line, then a short body that explains WHY the change was made, not what the diff already shows.",
+   "prompts": [
+    "just fixed the bug where login tokens expired after 5 min instead of 60. what should i write?",
+    "ok i'm done with the dark mode toggle, how do i describe this change when i save it to git",
+    "I changed 14 files to rename userId to accountId. help me word the git history entry",
+    "wrote the retry logic for the upload worker, about to run git commit -m, what do i put",
+    "my teammate says my commits are useless, 'fix stuff' lol. what's a better way to label this: removed unused deps and bumped vite",
+    "i staged the migration that adds an index on orders.created_at. words for the commit?",
+    "need a one line summary for the change that stops the cart from double charging",
+    "finished the pagination work. give me the text i should use when committing it"
+   ]
+  },
+  {
+   "name": "sql-review",
+   "plain": "How to review a SQL query for performance problems.",
+   "triggers": "SQL queries, slow queries, database performance, indexes, joins, or query plans",
+   "also": "a 'SQL review'",
+   "body": "Check the query for: SELECT *, missing indexes on filter and join columns, functions on indexed columns, N+1 patterns, unbounded result sets without LIMIT, and implicit type casts. Report each problem with a one-line fix.",
+   "prompts": [
+    "this takes 14 seconds on prod: select * from orders o join users u on u.id = o.user_id where lower(u.email) like '%gmail%' order by o.created_at desc",
+    "why is my report page so slow? it runs select * from events where date(created_at) = '2026-10-01' for every user",
+    "here's my query: SELECT name FROM products WHERE price::text LIKE '9%'. it crawls on 2M rows",
+    "our dashboard fires 200 small queries per page load, one per row in the table. thoughts?",
+    "can you look over select count(*) from logs where message like '%timeout%' and the table has 80M rows",
+    "the db CPU is pegged and the culprit is a join between invoices and line_items with no where clause. what's wrong with it",
+    "SELECT * FROM sessions ORDER BY last_seen DESC; it returns 5 million rows to the app. fix?",
+    "is this fine? update users set plan = 'pro' where id in (select user_id from payments where amount > 0)"
+   ]
+  }
+ ],
+ "negatives": [
+  "what's the capital of Australia?",
+  "explain how photosynthesis works in simple words",
+  "give me a 3 day itinerary for Lisbon",
+  "convert 72 fahrenheit to celsius"
+ ]
+}`;
+---
+<BaseLayout title="Make Claude use your skills: the pushy sentence and the test: Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · PUSHY pack</p>
+      <h1>The one sentence that made Claude Haiku load the right skill 39 times out of 64 instead of 10.</h1>
+      <p class="tag">Claude Code reads only each skill's name and <code>description</code> up front and decides from that whether to load the rest. A vague description is the usual reason a skill never fires.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The pattern</h2>
+      <pre><code>{sentence}</code></pre>
+      <p>Put it at the end of the <code>description</code> in each skill's <code>SKILL.md</code>. This is the "make the skill descriptions a little bit pushy" advice from Anthropic's own <a href="https://github.com/anthropics/claude-plugins-official/blob/main/plugins/skill-creator/skills/skill-creator/SKILL.md">skill-creator</a>.</p>
+      <pre><code>{example}</code></pre></section>
+    <section class="card"><h2><span class="n">2</span> What we measured (24 Oct 2026, Claude Code 2.1.309)</h2>
+      <p>Eight skills (commit-message, sql-review, readme-writer, pr-description, bug-report, prompt-polish, changelog, test-writer) with identical bodies, in one project. 64 requests (8 per skill, written without naming the skill) and 16 unrelated questions per run. A request counts as a hit when the first replies load the right skill. Tools were limited to Skill, Read, Glob and Grep, 2 turns.</p>
+      <ul>
+        <li><strong>Haiku 5.5:</strong> plain description 10 / 64, with the pushy sentence 39 / 64 (one run each).</li>
+        <li><strong>Sonnet 5.5:</strong> plain 98 / 128 (77%), pushy 121 / 128 (95%) (two runs each).</li>
+        <li><strong>Unrelated questions:</strong> 0 of 160 loaded a skill, plain or pushy.</li>
+        <li><strong>Opus 5.5:</strong> plain 116 / 128 (91%); we did not run Opus with the pushy sentence.</li>
+        <li><strong>Per skill (Haiku, plain to pushy):</strong> commit-message 0 to 7 of 8, sql-review 1 to 5, readme-writer 2 to 6, pr-description 3 to 6, bug-report 4 to 8, prompt-polish 0 to 2, changelog 0 to 5, test-writer 0 to 0.</li>
+      </ul>
+      <p class="note">Fair to say: this measures whether a skill loads, not whether the answer is better. The requests are ours, one project with eight skills, a restricted tool set. Bigger models already load skills well with a plain description. test-writer did not improve on Haiku.</p></section>
+    <section class="card"><h2><span class="n">3</span> Run it on your own skills</h2>
+      <p>Save as <code>run_trigger_test.py</code> next to a <code>skills.json</code> shaped like the sample below (your skills' names, plain descriptions, a <code>triggers</code> phrase, an <code>also</code> phrase, a body and 8 indirect requests each; add unrelated questions under <code>negatives</code>). Run <code>python3 run_trigger_test.py claude-haiku-5-5 plain,pushy</code>. It needs Claude Code; every run costs real tokens (about 2 cents each on Haiku, more on larger models).</p>
+      <pre><code>{harness}</code></pre>
+      <p>skills.json (shape, two skills shown):</p>
+      <pre><code>{sample}</code></pre></section>
+  </main>
+</BaseLayout>

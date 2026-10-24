@@ -1,0 +1,39 @@
+---
+// promptanddone.com/klein: the KLEIN pack (DM deliverable for the "flux-klein-local-photo-edit" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const install = "# Apple silicon Mac, about 15 GB free disk for the first download\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nuv tool install --with \"pillow<12\" mflux   # the pin avoids a Pillow 12 import error we hit on Python 3.12/3.14";
+const makeIt = "mflux-generate-flux2 --model flux2-klein-4b --steps 4 \\\n  --width 864 --height 1536 --seed 6 --output base.png \\\n  --prompt \"A bakery storefront seen straight on from the street on a bright morning, a large flat wooden sign across the top reading 'SUNRISE BAKERY' in big cream letters, a big arched shop window full of sourdough loaves, croissants and pastries, a blue door, potted geraniums, wet cobblestone street, golden sunrise light, photograph\"";
+const editIt = "mflux-generate-flux2-edit --model flux2-klein-4b --steps 4 \\\n  --image-paths base.png --seed 1 --output snow.png \\\n  --prompt \"The same bakery storefront straight on, at night in heavy snowfall, snow on the sign and window ledge, glowing warm window light, the sign still reads 'SUNRISE BAKERY', photograph\"";
+const more = "# paint it red\n\"The same bakery storefront straight on in the same morning light, but the arched window frame, the door and the lower wall are painted bright red, the sign reads 'SUNRISE BAKERY', photograph\"\n\n# watercolor\n\"The same bakery storefront straight on as a bold gouache and watercolor illustration, saturated colors, visible brush strokes and ink outlines, paper texture, the sign reads 'SUNRISE BAKERY'\"\n\n# add a cat (two reference images: the photo and a picture of a cat)\nmflux-generate-flux2-edit --model flux2-klein-4b --steps 4 --image-paths base.png cat.png --seed 7 \\\n  --prompt \"The same bakery storefront straight on in the morning, a large fluffy ginger cat sitting in the center of the big arched shop window in front of the bread, clearly visible, the sign reads 'SUNRISE BAKERY', photograph\"";
+---
+<BaseLayout title="FLUX.2 klein on your Mac: the KLEIN pack — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · KLEIN pack</p>
+      <h1>Type one sentence, the photo changes. Free, on your Mac.</h1>
+      <p class="tag">FLUX.2 [klein] 4B from Black Forest Labs is an open image model (Apache 2.0) that makes photos from a sentence and edits a photo from another sentence. <code>mflux</code> (MIT) runs it on Apple silicon. This page has the install command, the exact prompts and commands from the reel, and what we measured on 24 Oct 2026.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Install</h2>
+      <pre><code>{install}</code></pre>
+      <p>Model card: <a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-4B">huggingface.co/black-forest-labs/FLUX.2-klein-4B</a> (no account or token needed for this model; Hugging Face may rate-limit anonymous downloads, so set <code>HF_TOKEN</code> if the first download crawls). Runner: <a href="https://github.com/filipstrand/mflux">github.com/filipstrand/mflux</a>. The first command downloads the weights, about 15 GB; after that generating and editing run on your Mac.</p></section>
+    <section class="card"><h2><span class="n">2</span> Make the photo</h2>
+      <pre><code>{makeIt}</code></pre>
+      <p>This is the exact command behind the reel's first photo (4 steps, 864x1536). The model likes a full scene description: framing, subject, background, light.</p></section>
+    <section class="card"><h2><span class="n">3</span> Type what to change</h2>
+      <pre><code>{editIt}</code></pre>
+      <p>Describe the new picture as a whole, "the same ..." plus the change. These are the other edits from the reel:</p>
+      <pre><code>{more}</code></pre></section>
+    <section class="card"><h2><span class="n">4</span> What we measured (24 Oct 2026)</h2>
+      <p>Apple M4 Pro, 24 GB, mflux 0.23.0, FLUX.2 [klein] 4B, 4 steps.</p>
+      <table><thead><tr><th>Test</th><th>Result</th></tr></thead><tbody>
+        <tr><td>New photo, 864x1536</td><td>46 s wall clock including model load (39 s sampling); peak memory 20.6 GB</td></tr>
+        <tr><td>New photo, 768x1024</td><td>about 24 s sampling; peak memory 15.4 GB</td></tr>
+        <tr><td>Edits, 864x1536</td><td>roughly 1 to 1.5 minutes each including load (three seeds in one command is cheaper)</td></tr>
+        <tr><td>Red / watercolor / cat edits</td><td>red worked on 3 of 3 seeds; watercolor needed a stronger style prompt; the cat needed "large ... clearly visible"</td></tr>
+        <tr><td>Text inside photos</td><td>Weak spot. A three-word sign was misspelled on 6 of 6 seeds; a two-word sign came out clean on 2 of 6; editing a sign to say something else failed on 5 of 5 seeds. The reel uses clean results picked from several seeds.</td></tr>
+      </tbody></table>
+      <p>One machine, one scene. We did not test 16 GB Macs (try smaller sizes or <code>--low-ram</code>), Windows or Linux, or compare quality with ChatGPT, Midjourney or Photoshop. Same seed with different settings did not always give the same picture.</p></section>
+    <section class="card"><h2><span class="n">5</span> Licenses</h2>
+      <p>FLUX.2 [klein] 4B is Apache 2.0; the 9B model and the newer FLUX 3 Image Klein use other licenses (non-commercial or the FLUX Kommunity License, and they need a Hugging Face login), so check before using them. mflux is MIT. Read the model card's limits: it can misrender text and may not follow every prompt.</p></section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,53 @@
+---
+// promptanddone.com/clone: the CLONE pack (DM deliverable for the "claude-page-clone-loop" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const prompt = `Work in a loop: write index.html, then run ./compare.sh (it renders your page to shot.png, writes a red diff.png and prints the percent of pixels that differ). Read shot.png and diff.png with the Read tool, fix the biggest differences, and run ./compare.sh again. Stop when the mismatch is under 3 percent or after 8 rounds, whichever comes first.`;
+const sh = `#!/bin/sh
+cd "$(dirname "$0")" && python3 compare.py`;
+const py = `import sys, os, json, time, shutil
+from playwright.sync_api import sync_playwright
+from PIL import Image, ImageChops
+import numpy as np
+here=os.path.dirname(os.path.abspath(__file__))
+exe=os.path.expanduser('~/Library/Caches/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell')
+with sync_playwright() as p:
+    b=p.chromium.launch(executable_path=exe)
+    pg=b.new_context(viewport={'width':430,'height':int(Image.open(os.path.join(here,'target.png')).height)},device_scale_factor=1).new_page()
+    pg.goto('file://'+os.path.join(here,'index.html'),wait_until='load'); pg.wait_for_timeout(500)
+    pg.screenshot(path=os.path.join(here,'shot.png'),full_page=False); b.close()
+t=Image.open(os.path.join(here,'target.png')).convert('RGB'); s=Image.open(os.path.join(here,'shot.png')).convert('RGB')
+a=np.asarray(t).astype(int); c=np.asarray(s).astype(int)
+d=np.abs(a-c).max(axis=2); bad=d>24
+pct=100*bad.mean()
+vis=np.asarray(s).copy()//3+170
+vis[bad]=[255,40,40]
+Image.fromarray(vis.astype('uint8')).save(os.path.join(here,'diff.png'))
+rd=os.path.join(here,'rounds'); os.makedirs(rd,exist_ok=True)
+n=len([f for f in os.listdir(rd) if f.endswith('-shot.png')])+1
+shutil.copy(os.path.join(here,'shot.png'),os.path.join(rd,f'{n:02d}-shot.png'))
+shutil.copy(os.path.join(here,'diff.png'),os.path.join(rd,f'{n:02d}-diff.png'))
+open(os.path.join(here,'log.jsonl'),'a').write(json.dumps({'round':n,'t':time.time(),'mismatch_pct':round(pct,2)})+'\\n')
+print(f'round {n}: {pct:.2f}% of pixels differ (red in diff.png). Look at shot.png and diff.png.')
+`;
+---
+<BaseLayout title="Claude clones a page by checking its own screenshot: prompt and script — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · CLONE pack</p>
+      <h1>Same Claude, same screenshot: blind vs checking itself. Here's the prompt and the script.</h1>
+      <p class="tag">You need Claude Code on a plan, Python 3 with <code>playwright</code> and <code>pillow</code> and <code>numpy</code> (<code>pip install playwright pillow numpy &amp;&amp; playwright install chromium</code>). Put a screenshot of the page you want to rebuild in an empty folder as <code>target.png</code>, plus any images from the page in <code>assets/</code>.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> The prompt (the self-check arm)</h2>
+      <pre><code>{prompt}</code></pre>
+      <p>The blind arm got the same first paragraph and one different instruction: write <code>index.html</code> once, do not render or check it.</p></section>
+    <section class="card"><h2><span class="n">2</span> compare.sh</h2>
+      <pre><code>{sh}</code></pre>
+      <p>Save it as <code>compare.sh</code> next to <code>compare.py</code> and make it executable (<code>chmod +x compare.sh</code>).</p></section>
+    <section class="card"><h2><span class="n">3</span> compare.py</h2>
+      <pre><code>{py}</code></pre>
+      <p>It renders your <code>index.html</code> at the screenshot's width and height, counts the pixels where any colour channel differs by more than 24 out of 255, and paints them red in <code>diff.png</code>. Change the Chromium path to your own install.</p></section>
+    <section class="card"><h2><span class="n">4</span> What we measured</h2>
+      <p>Tested 24 Oct 2026 with Claude Code 2.1.309 on Sonnet 5.5, on a 430 x 1500 mobile screenshot of the Wikipedia article "Voxel" (text and images CC BY-SA 4.0). Blind: 17.07% and 12.73% of pixels differed (two runs, 18 s, about 7 cents API-equivalent). Self-check: 2.52% in 6 rounds and 64 s for 18 cents, and 3.51% in 5 rounds for 14 cents. The blind run put the Wikipedia wordmark in the first picture slot because it never opened the image files.</p>
+      <p class="note">Fair to say: results vary by page. On the Wikipedia "Claude" article and python.org the loop helped about 1.5 to 2 times; on Hacker News it did not help at all (fonts and row heights it could not match). Not pixel perfect: 2.5% of pixels still differ.</p></section>
+  </main>
+</BaseLayout>

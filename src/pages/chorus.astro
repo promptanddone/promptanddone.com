@@ -1,0 +1,44 @@
+---
+// promptanddone.com/chorus: the CHORUS pack (DM deliverable for the "ace-step-free-local-music" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const install = "# needs Python 3.11 or 3.12 and git\ncurl -LsSf https://astral.sh/uv/install.sh | sh\ngit clone https://github.com/ACE-Step/ACE-Step-1.5.git\ncd ACE-Step-1.5\nuv sync\nchmod +x start_api_server_macos.sh && ./start_api_server_macos.sh   # Apple Silicon (MLX). On NVIDIA: ./start_api_server.sh";
+const askClaude = "claude -p \"Write lyrics for a catchy 60-second pop song about an AI coding agent that fixes my bugs while I sleep. Format for the ACE-Step music model: section tags in square brackets ([Verse 1], [Chorus], [Verse 2], [Chorus]); 4 short lines per verse, 4 short lines per chorus, simple singable words, a repeated hook line 'fixed it while you slept'. Output ONLY the lyrics, no commentary.\"";
+const lyrics = "[Verse 1]\nMidnight hits, I close my eyes\nTerminal glows, the cursor blinks\nRed lines waiting, stack traces rise\nI let it go, no time to think\n\n[Chorus]\nFixed it while you slept\nEvery bug is swept\nFixed it while you slept\nWake up, all green, no regrets\n\n[Verse 2]\nMorning sun, I check my phone\nTests all pass, the build is clean\nPull request merged, I'm not alone\nBest teammate I've ever seen\n\n[Chorus]\nFixed it while you slept\nEvery bug is swept\nFixed it while you slept\nWake up, all green, no regrets";
+const request = "{\n \"prompt\": \"bright upbeat pop song, clear female lead vocal, punchy drums, synth bass, shimmering guitars, catchy sing-along chorus\",\n \"lyrics\": \"<paste the lyrics here>\",\n \"audio_duration\": 60,\n \"thinking\": true,\n \"batch_size\": 3,\n \"audio_format\": \"mp3\",\n \"vocal_language\": \"en\"\n}";
+const call = "curl -s -X POST http://127.0.0.1:8001/release_task -H 'Content-Type: application/json' -d @request.json\n# returns a task_id; poll POST /query_result with {\"task_id_list\": [\"<task_id>\"]}, then download the mp3 from the file path in the result";
+---
+<BaseLayout title="ACE-Step: the free local song generator from the reel (the CHORUS pack) — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · CHORUS pack</p>
+      <h1>Claude writes the lyrics. A free AI on your own computer sings them.</h1>
+      <p class="tag">ACE-Step 1.5 is an open-source (MIT) music generation model that runs on your own machine. This page has the install steps, the exact Claude request and style line from the reel, the API call, and what we measured on 24 Oct 2026.</p>
+    </header>
+    <section class="card"><h2><span class="n">♪</span> Listen: three full 60-second songs</h2>
+      <p>Same lyrics, same style line, same request, re-run on 24 Oct 2026 (three new takes; the reel's 10-second clip is from the first run). Unedited ACE-Step output.</p>
+      <p>Take 1<br /><audio controls preload="none" src="/songs/fixed-it-while-you-slept-take1.mp3"></audio></p>
+      <p>Take 2<br /><audio controls preload="none" src="/songs/fixed-it-while-you-slept-take2.mp3"></audio></p>
+      <p>Take 3<br /><audio controls preload="none" src="/songs/fixed-it-while-you-slept-take3.mp3"></audio></p></section>
+    <section class="card"><h2><span class="n">1</span> Install and start it</h2>
+      <pre><code>{install}</code></pre>
+      <p>Repo and README: <a href="https://github.com/ACE-Step/ACE-Step-1.5">github.com/ACE-Step/ACE-Step-1.5</a>. The first request downloads the models (about 9.4 GB for us), so leave disk space; after that it runs locally. There is also a Gradio web UI (<code>start_gradio_ui_macos.sh</code>) if you prefer clicking to curl.</p></section>
+    <section class="card"><h2><span class="n">2</span> Ask Claude for lyrics</h2>
+      <pre><code>{askClaude}</code></pre>
+      <p>This is the exact request we sent (Claude Sonnet, about 5 cents of API-equivalent cost) and the lyrics it returned:</p>
+      <pre><code>{lyrics}</code></pre></section>
+    <section class="card"><h2><span class="n">3</span> The request that made the song</h2>
+      <p>Save as <code>request.json</code>. Lyrics go in <code>lyrics</code>, one line describing the sound goes in <code>prompt</code>, <code>batch_size: 3</code> gives three takes in one go.</p>
+      <pre><code>{request}</code></pre>
+      <pre><code>{call}</code></pre></section>
+    <section class="card"><h2><span class="n">4</span> What we measured (24 Oct 2026)</h2>
+      <p>Apple M4 Pro Mac with 24 GB, ACE-Step 1.5 (commit ca1e85f), turbo model with the 5Hz language model, MLX backend.</p>
+      <table><thead><tr><th>Test</th><th>Result</th></tr></thead><tbody>
+        <tr><td>Three 60-second takes of the lyrics above in one request</td><td>87 s total (including the first model load)</td></tr>
+        <tr><td>Do the takes sing the words? (Whisper large-v3 transcript)</td><td>Take 3 matched the lyrics line for line; takes 1 and 2 sang verse 1 correctly and most of the rest with small word swaps. We could only check by transcript, not by ear: listen and keep the best take.</td></tr>
+        <tr><td>Describe-a-song mode (no lyrics, just a sentence)</td><td>Did not follow our brief (it made an unrelated Portuguese song). Write or generate lyrics yourself, as above.</td></tr>
+      </tbody></table>
+      <p>One machine, one set of lyrics. The reel plays a 10-second excerpt of take 3, unedited. We did not compare quality with Suno or other services.</p></section>
+    <section class="card"><h2><span class="n">5</span> Use it responsibly</h2>
+      <p>The README asks you to check that what you generate is original, to disclose AI involvement and to avoid copying protected styles or material. Read the license and disclaimer in the repo before you publish songs commercially.</p></section>
+  </main>
+</BaseLayout>

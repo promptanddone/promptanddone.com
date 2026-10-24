@@ -1,0 +1,34 @@
+---
+// promptanddone.com/slop: the SLOP pack (DM deliverable for the "hallmark-anti-slop-design" reel). Prepared, not deployed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+const install = "# needs Node 18+ and a coding agent (we used Claude Code)\nnpx skills add nutlope/hallmark --agent claude-code\n# or for every project and every agent: npx skills add nutlope/hallmark -g";
+const build = "# in Claude Code, inside your project\n/hallmark Build a one-page website for Pawline, a dog-walking service in Austin, Texas: people can book a walk, see the prices and meet the walkers. Single self-contained index.html. Infer everything, ask no questions.";
+const redo = "/hallmark redesign ./index.html     # rebuilds the page, keeps content and wiring\n/hallmark audit ./index.html        # only reports\nnode .claude/skills/hallmark/scripts/sloplint.mjs ./index.html   # the linter on its own";
+---
+<BaseLayout title="Stop your AI sites looking the same: the SLOP pack — Prompt &amp; Done">
+  <main>
+    <header>
+      <p class="kicker"><a href="/">Prompt &amp; Done</a> · SLOP pack</p>
+      <h1>Same Claude, same prompt: Hallmark vs the AI default</h1>
+      <p class="tag">Hallmark is a free, MIT-licensed design skill by Nutlope (Together AI) for Claude Code, Codex, Cursor and OpenCode. This page has the install line, the exact prompt we used, and what we measured on 24 Oct 2026 with Claude Sonnet 5.5.</p>
+    </header>
+    <section class="card"><h2><span class="n">1</span> Install</h2>
+      <pre><code>{install}</code></pre>
+      <p>Repo: <a href="https://github.com/Nutlope/hallmark">github.com/Nutlope/hallmark</a> (MIT). The skill is free; the model time is paid by your own Claude / Codex plan.</p></section>
+    <section class="card"><h2><span class="n">2</span> The prompt from the reel</h2>
+      <pre><code>{build}</code></pre>
+      <p>The plain run used the same sentence without the skill. Both pages (and the Brightloop pair) are in the pack's <code>pages/</code> folder: open the index.html files side by side.</p></section>
+    <section class="card"><h2><span class="n">3</span> Redesign an old page, or just lint it</h2>
+      <pre><code>{redo}</code></pre>
+      <p>We ran the redesign on the plain Pawline page: same copy, same prices, same form, a new system (the Overprint theme). The linter ran clean afterwards.</p></section>
+    <section class="card"><h2><span class="n">4</span> What we measured (24 Oct 2026)</h2>
+      <table><thead><tr><th>Run (Claude Sonnet 5.5)</th><th>Hallmark's own linter</th><th>Cost, time</th></tr></thead><tbody>
+        <tr><td>Pawline, plain</td><td>29 FAIL, 17 REFLEX</td><td>$0.10, 33 s</td></tr>
+        <tr><td>Pawline, /hallmark (Sticker theme)</td><td>0 FAIL (1 waived)</td><td>$0.35, 93 s</td></tr>
+        <tr><td>Brightloop, plain</td><td>36 FAIL, 33 REFLEX</td><td>$0.13, 43 s</td></tr>
+        <tr><td>Brightloop, /hallmark (Coral theme)</td><td>clean</td><td>$0.33, 92 s</td></tr>
+        <tr><td>/hallmark redesign of the plain Pawline page</td><td>clean</td><td>$0.31, 64 s</td></tr>
+      </tbody></table>
+      <p>Costs are API-equivalent. Honest limits: the linter is Hallmark's own rulebook (some plain-page fails are Hallmark-only rules, like the missing Hallmark stamp); whether a page looks better is taste; two prompts, one run each; we did not compare other design skills; Hallmark used about 3x the tokens and 2.5x the time; its browser render check needs <code>npm i -g puppeteer-core</code> and did not run in our test; the walker names and prices both models invented are stand-ins.</p></section>
+  </main>
+</BaseLayout>

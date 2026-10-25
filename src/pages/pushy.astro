@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/pushy: the PUSHY pack (DM deliverable for the "claude-skill-pushy-description" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const sentence = String.raw`<your plain description> Make sure to use this skill whenever the user mentions <topics>, even if they don't explicitly ask for <thing>.`;
 const example = String.raw`---
 name: commit-message
@@ -105,7 +105,7 @@ const sample = String.raw`{
  ]
 }`;
 ---
-<BaseLayout title="Make Claude use your skills: the pushy sentence and the test: Prompt &amp; Done">
+<PackLayout title="Make Claude use your skills: the pushy sentence and the test: Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · PUSHY pack</p>
@@ -132,4 +132,4 @@ const sample = String.raw`{
       <p>skills.json (shape, two skills shown):</p>
       <pre><code>{sample}</code></pre></section>
   </main>
-</BaseLayout>
+</PackLayout>

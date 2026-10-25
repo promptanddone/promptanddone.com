@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/verdict — the VERDICT pack (DM deliverable for the "last30days-internet-verdict" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const installClaude = '/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days';
 const installOther = 'npx skills add mvanhorn/last30days-skill -g';
 const ours = '/last30days Claude Code vs Codex --deep';
@@ -12,7 +12,7 @@ const prompts = [
   '/last30days <thing you are about to buy> --quick',
 ];
 ---
-<BaseLayout title="last30days: let the internet decide — Prompt &amp; Done">
+<PackLayout title="last30days: let the internet decide — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · VERDICT pack</p>
@@ -30,4 +30,4 @@ const prompts = [
     <section class="card"><h2><span class="n">4</span> Good to know</h2>
       <p>It saves each brief as a markdown file in <code>~/Documents/Last30Days</code>. Check quotes against the linked threads before you repeat them: in our run one Reddit thread about a third-party plugin was summarised as a Claude Code feature.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

@@ -1,7 +1,6 @@
 ---
 // promptanddone.com/nightshift: the NIGHTSHIFT pack (DM deliverable for the "eight-reels-one-prompt" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/pack.css';
+import PackLayout from '../layouts/PackLayout.astro';
 
 const exact = `make as many reel as you can one at a time, I am going to sleep.
 
@@ -95,7 +94,7 @@ for k in ("five_hour", "seven_day"):
     print(k, w.get("utilization"), int(t.timestamp()) if t else "-", t.strftime("%a %H:%M") if t else "-")
 '`;
 ---
-<BaseLayout title="NIGHTSHIFT: one prompt, a night shift of finished work — Prompt & Done">
+<PackLayout title="NIGHTSHIFT: one prompt, a night shift of finished work — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · NIGHTSHIFT pack</p>
@@ -149,7 +148,7 @@ for k in ("five_hour", "seven_day"):
     <section class="card"><h2><span class="n">G</span> Honest note</h2>
       <p>Real run: Claude Code, 22 Oct 2026, 8 reels in about 7 hours; the usage limit was not actually hit; I stepped in at the end to stop it.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>
 
 
 <script define:vars={{ texts: { clean, research, production, orchestrator, brief, usage } }}>

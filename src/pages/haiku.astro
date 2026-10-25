@@ -1,10 +1,10 @@
 ---
 // promptanddone.com/haiku: the HAIKU pack (DM deliverable for the "haiku-opus-fable-showdown" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const prompt = "Make a playable tower-defense game in a single index.html file (canvas, no libraries, no external files). A winding path, enemies that come in waves, click to place three kinds of towers (rapid fire, splash, slow) that cost gold, lives and gold shown on screen, and a demo mode where the game plays itself until a key is pressed. It should look great on a phone-sized screen.";
 const run = "# one empty folder per model\nmkdir haiku && cd haiku\nclaude --model claude-haiku-5-5 --effort medium\n# then paste the prompt above and open index.html\n\n# same for the others\nclaude --model claude-opus-5-5 --effort medium\nclaude --model claude-fable-5-1 --effort medium";
 ---
-<BaseLayout title="Haiku 5.5 vs Opus 5.5 vs Fable 5.1: the HAIKU pack (prompt + all three games) — Prompt &amp; Done">
+<PackLayout title="Haiku 5.5 vs Opus 5.5 vs Fable 5.1: the HAIKU pack (prompt + all three games) — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · HAIKU pack</p>
@@ -34,4 +34,4 @@ const run = "# one empty folder per model\nmkdir haiku && cd haiku\nclaude --mod
     <section class="card"><h2><span class="n">5</span> Honest limits</h2>
       <p>One simple one-file spec, one run per model, no scoring or ranking of the three games. This says nothing about harder, longer or more open-ended work, where the bigger models are meant to earn their price. Start with the cheap model for a job like this and step up when the result is wrong, not by default.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

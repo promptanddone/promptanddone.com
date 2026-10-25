@@ -1,13 +1,13 @@
 ---
 // promptanddone.com/chorus: the CHORUS pack (DM deliverable for the "ace-step-free-local-music" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = "# needs Python 3.11 or 3.12 and git\ncurl -LsSf https://astral.sh/uv/install.sh | sh\ngit clone https://github.com/ACE-Step/ACE-Step-1.5.git\ncd ACE-Step-1.5\nuv sync\nchmod +x start_api_server_macos.sh && ./start_api_server_macos.sh   # Apple Silicon (MLX). On NVIDIA: ./start_api_server.sh";
 const askClaude = "claude -p \"Write lyrics for a catchy 60-second pop song about an AI coding agent that fixes my bugs while I sleep. Format for the ACE-Step music model: section tags in square brackets ([Verse 1], [Chorus], [Verse 2], [Chorus]); 4 short lines per verse, 4 short lines per chorus, simple singable words, a repeated hook line 'fixed it while you slept'. Output ONLY the lyrics, no commentary.\"";
 const lyrics = "[Verse 1]\nMidnight hits, I close my eyes\nTerminal glows, the cursor blinks\nRed lines waiting, stack traces rise\nI let it go, no time to think\n\n[Chorus]\nFixed it while you slept\nEvery bug is swept\nFixed it while you slept\nWake up, all green, no regrets\n\n[Verse 2]\nMorning sun, I check my phone\nTests all pass, the build is clean\nPull request merged, I'm not alone\nBest teammate I've ever seen\n\n[Chorus]\nFixed it while you slept\nEvery bug is swept\nFixed it while you slept\nWake up, all green, no regrets";
 const request = "{\n \"prompt\": \"bright upbeat pop song, clear female lead vocal, punchy drums, synth bass, shimmering guitars, catchy sing-along chorus\",\n \"lyrics\": \"<paste the lyrics here>\",\n \"audio_duration\": 60,\n \"thinking\": true,\n \"batch_size\": 3,\n \"audio_format\": \"mp3\",\n \"vocal_language\": \"en\"\n}";
 const call = "curl -s -X POST http://127.0.0.1:8001/release_task -H 'Content-Type: application/json' -d @request.json\n# returns a task_id; poll POST /query_result with {\"task_id_list\": [\"<task_id>\"]}, then download the mp3 from the file path in the result";
 ---
-<BaseLayout title="ACE-Step: the free local song generator from the reel (the CHORUS pack) — Prompt &amp; Done">
+<PackLayout title="ACE-Step: the free local song generator from the reel (the CHORUS pack) — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · CHORUS pack</p>
@@ -41,4 +41,4 @@ const call = "curl -s -X POST http://127.0.0.1:8001/release_task -H 'Content-Typ
     <section class="card"><h2><span class="n">5</span> Use it responsibly</h2>
       <p>The README asks you to check that what you generate is original, to disclose AI involvement and to avoid copying protected styles or material. Read the license and disclaimer in the repo before you publish songs commercially.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

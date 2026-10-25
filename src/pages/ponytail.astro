@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/ponytail: the PONYTAIL pack (DM deliverable for the "ponytail-lazy-senior-dev" reel).
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = '/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail';
 const prompts = [
   'Add a date picker to the booking form so owners can choose the appointment date. Past dates shouldn\'t be allowed.',
@@ -11,7 +11,7 @@ const prompts = [
 const rows = [['Dark mode', '63, 67, 63', '21, 22, 20'], ['Validation', '109, 159, 157', '34, 30, 32'], ['Date picker', '59, 49, 58', '6, 6, 5'], ['Photo upload', '73, 124, 65', '42, 15, 10'], ['Total', '1,046', '243']];
 const ponyDiff = "const [date, setDate] = useState('');\n// en-CA formats as YYYY-MM-DD in the owner's local timezone (toISOString would use UTC)\nconst today = new Date().toLocaleDateString('en-CA');\nawait createBooking({ owner, pet, phone, date });\n<Input label=\"Appointment date\" type=\"date\" min={today} value={date} onChange={(e) => setDate(e.target.value)} required />\nexport type Booking = { owner: string; pet: string; phone: string; date: string };";
 ---
-<BaseLayout title="Ponytail: the install + our 24-run test — Prompt &amp; Done">
+<PackLayout title="Ponytail: the install + our 24-run test — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · PONYTAIL pack</p>
@@ -33,4 +33,4 @@ const ponyDiff = "const [date, setDate] = useState('');\n// en-CA formats as YYY
     <section class="card"><h2><span class="n">4</span> Fair to say</h2>
       <p>Less code is not automatically better code: plain Claude wrote more tests (in 7 of 12 runs vs 4 of 12). This is one small app and one model, so your numbers will differ. Ponytail's own benchmark (39 tasks, Opus 5.5) reports 53% less code.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

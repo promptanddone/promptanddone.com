@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/graphify: the GRAPHIFY pack (DM deliverable for the "graphify-codebase-map" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = String.raw`uv tool install graphifyy      # note the double y (official package); or: pipx install graphifyy
 graphify install               # registers the skill with Claude Code (other assistants: graphify install --platform <name>, graphify cursor install)`;
 const run = String.raw`cd your-repo
@@ -13,7 +13,7 @@ Shortest path (2 hops):
 graphify explain "HttpResponse"      # one concept and its neighbours
 graphify query "how does a request reach a view?"   # a scoped subgraph for a plain-language question`;
 ---
-<BaseLayout title="Graphify: map any codebase for free, no AI tokens: Prompt &amp; Done">
+<PackLayout title="Graphify: map any codebase for free, no AI tokens: Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · GRAPHIFY pack</p>
@@ -33,4 +33,4 @@ graphify query "how does a request reach a view?"   # a scoped subgraph for a pl
       </ul>
       <p class="note">Fair to say: this is the free, local, code-only part (tree-sitter). Docs, PDFs, images and video need a model backend. The paid Graphify Cloud is a separate product. We tested Claude Code with and without the graph on Flask and Django (Haiku, 8 runs): no consistent saving in tokens or cost, so we do not claim one. We tested the Claude Code install; Cursor and the other assistants are per the README.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

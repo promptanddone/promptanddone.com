@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/playwright: the PLAYWRIGHT pack (DM deliverable for the "claude-browser-form-fill" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const setup = 'claude mcp add playwright npx @playwright/mcp@latest';
 const prompt = 'Fill in the form at THE-FORM-URL using this email. Go through every step. Stop on the Review page and do not submit.';
 const email = `Subject: Re: Maple Court, yes we want the 2 bed!
@@ -18,7 +18,7 @@ Emergency contact is my sister Ada Okafor on 612 555 0111.
 
 Yes to the background and credit check, everything above is true. Sign it as Maya Okafor.`;
 ---
-<BaseLayout title="Claude fills a web form from one email: Playwright MCP — Prompt &amp; Done">
+<PackLayout title="Claude fills a web form from one email: Playwright MCP — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · PLAYWRIGHT pack</p>
@@ -37,4 +37,4 @@ Yes to the background and credit check, everything above is true. Sign it as May
       <p>Tested 22 Oct 2026 with Claude Code 2.1.308 on Sonnet 5.5 and Playwright MCP 0.0.83, on our own 35-field sample rental form (4 pages plus Review, dropdowns, a stepper, a pet toggle, an Add-another-reference button). 5 of 5 runs filled all 35 fields in 49 to 76 seconds, for $0.15 to $0.21 each (API-equivalent). We checked every field value of one run against the email; Submit was never touched. The three judgement calls were labels the email never named (Former landlord, Manager) and the pet type.</p>
       <p class="note">Fair to say: our own form, no login, no CAPTCHA, headless Chrome. Real sites vary. Try it on a throwaway form first and never point it at accounts you can't afford to get wrong.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

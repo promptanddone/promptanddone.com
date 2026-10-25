@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/clone: the CLONE pack (DM deliverable for the "claude-page-clone-loop" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const prompt = `Work in a loop: write index.html, then run ./compare.sh (it renders your page to shot.png, writes a red diff.png and prints the percent of pixels that differ). Read shot.png and diff.png with the Read tool, fix the biggest differences, and run ./compare.sh again. Stop when the mismatch is under 3 percent or after 8 rounds, whichever comes first.`;
 const sh = `#!/bin/sh
 cd "$(dirname "$0")" && python3 compare.py`;
@@ -30,7 +30,7 @@ open(os.path.join(here,'log.jsonl'),'a').write(json.dumps({'round':n,'t':time.ti
 print(f'round {n}: {pct:.2f}% of pixels differ (red in diff.png). Look at shot.png and diff.png.')
 `;
 ---
-<BaseLayout title="Claude clones a page by checking its own screenshot: prompt and script — Prompt &amp; Done">
+<PackLayout title="Claude clones a page by checking its own screenshot: prompt and script — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · CLONE pack</p>
@@ -50,4 +50,4 @@ print(f'round {n}: {pct:.2f}% of pixels differ (red in diff.png). Look at shot.p
       <p>Tested 24 Oct 2026 with Claude Code 2.1.309 on Sonnet 5.5, on a 430 x 1500 mobile screenshot of the Wikipedia article "Voxel" (text and images CC BY-SA 4.0). Blind: 17.07% and 12.73% of pixels differed (two runs, 18 s, about 7 cents API-equivalent). Self-check: 2.52% in 6 rounds and 64 s for 18 cents, and 3.51% in 5 rounds for 14 cents. The blind run put the Wikipedia wordmark in the first picture slot because it never opened the image files.</p>
       <p class="note">Fair to say: results vary by page. On the Wikipedia "Claude" article and python.org the loop helped about 1.5 to 2 times; on Hacker News it did not help at all (fonts and row heights it could not match). Not pixel perfect: 2.5% of pixels still differ.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

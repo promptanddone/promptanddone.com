@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/scripts — the SCRIPTS prompt pack (DM deliverable).
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 
 const prompt1 = `Act as a viral content strategist who studies short-form video for a living.
 
@@ -22,7 +22,7 @@ Rules for every script:
 
 Deliver it as a posting calendar: Day 1 through Day 30, one script per day, each labeled with the hook pattern it uses. Make every hook feel like breaking news, not a pitch.`;
 ---
-<BaseLayout title="2 ChatGPT Prompts: 0 to 30M Views System — Prompt & Done">
+<PackLayout title="2 ChatGPT Prompts: 0 to 30M Views System — Prompt & Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · SCRIPTS pack</p>
@@ -53,10 +53,8 @@ Deliver it as a posting calendar: Day 1 through Day 30, one script per day, each
         <li>Film one script a day for 30 days. Don't edit the hooks — they're the point.</li>
       </ol>
     </section>
-
-    <footer>© Prompt &amp; Done</footer>
   </main>
-</BaseLayout>
+</PackLayout>
 
 <script define:vars={{ prompt1, prompt2 }}>
   const packs = { prompt1, prompt2 };
@@ -74,79 +72,3 @@ Deliver it as a posting calendar: Day 1 through Day 30, one script per day, each
   });
 </script>
 
-<style>
-  main {
-    width: min(100% - 2.25rem, 44rem);
-    margin: 0 auto;
-    padding: clamp(2rem, 7vh, 4rem) 0 2.5rem;
-  }
-  .kicker { font-size: .85rem; color: var(--soft); margin: 0 0 1.25rem; }
-  .kicker a { color: var(--accent); text-decoration: none; font-weight: 700; }
-  h1 {
-    margin: 0;
-    font-size: clamp(1.9rem, 8.5vw, 3.25rem);
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -.03em;
-    white-space: normal;
-  }
-  .tag { margin: 1rem 0 0; font-size: 1rem; line-height: 1.5; color: var(--soft); }
-  .card {
-    margin-top: 1.75rem;
-    border: 1px solid var(--line);
-    border-radius: 1rem;
-    padding: 1.4rem 1.35rem;
-    background: #101011;
-  }
-  .card h2 {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 900;
-    letter-spacing: -.01em;
-    display: flex;
-    align-items: center;
-    gap: .65rem;
-  }
-  .n {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.9rem;
-    height: 1.9rem;
-    border-radius: 999px;
-    background: var(--accent);
-    color: #191100;
-    font-size: 1.05rem;
-    flex: none;
-  }
-  .sub { margin: .6rem 0 0; color: var(--soft); font-size: .95rem; }
-  .prompt {
-    margin-top: 1rem;
-    white-space: pre-wrap;
-    font-size: .92rem;
-    line-height: 1.6;
-    color: var(--ink);
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: .6rem;
-    padding: 1rem 1.1rem;
-    overflow-wrap: anywhere;
-  }
-  .copy {
-    margin-top: .9rem;
-    display: inline-block;
-    font-family: inherit;
-    font-weight: 700;
-    font-size: .95rem;
-    color: #191100;
-    background: var(--accent);
-    border: none;
-    border-radius: .6rem;
-    padding: .7rem 1.3rem;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .how ol { margin: .8rem 0 0; padding-left: 1.3rem; line-height: 1.7; color: var(--ink); }
-  .how li { margin-bottom: .5rem; }
-  footer { margin-top: 2.5rem; color: var(--soft); font-size: .85rem; }
-</style>

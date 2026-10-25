@@ -1,10 +1,10 @@
 ---
 // promptanddone.com/chief — the CHIEF pack (DM deliverable for the "claude-chief-of-staff" reel).
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = 'npx skills@latest add mattpocock/skills --skill chief-of-staff';
 const goal = "/chief-of-staff Goal: build me a prompt library web app I'll actually use every day. Save my best AI prompts as cards with tags, search them instantly, fill in {{variables}} before copying, one tap to copy. Everything stays in localStorage and works offline. Mobile-first, dark, premium-looking UI. Plain HTML, CSS and ES modules, no build step. Logic tested with node:test. Seed it with 8 genuinely useful prompts and write a README.";
 ---
-<BaseLayout title="Chief of Staff: one goal, a team of agents — Prompt &amp; Done">
+<PackLayout title="Chief of Staff: one goal, a team of agents — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · CHIEF pack</p>
@@ -20,4 +20,4 @@ const goal = "/chief-of-staff Goal: build me a prompt library web app I'll actua
       <p>Claude Opus 5.5 in Claude Code: 9 background agents (never more than 3 at once), about 50 minutes, 278 passing tests, a working offline app after 23 minutes. Mid-run it answered an unrelated question in 3.9 seconds while two agents kept building. It also wrote ARCHITECTURE.md, CODING_STANDARDS.md and an <code>npm run check</code> that blocks shortcuts.</p>
       <p>Cost: about $16 at API list prices (we were on a Max plan). To keep it cheaper: use Sonnet, give it a smaller goal, or tell it to skip extra QA rounds.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

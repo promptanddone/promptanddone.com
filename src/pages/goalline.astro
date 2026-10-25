@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/goalline: the GOALLINE pack (DM deliverable for the "claude-goal-finish-line" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const lines = [
   {title: 'Perfect Lighthouse scores (the one from the reel)', line: "/goal npm run audit shows 100 on all four Lighthouse scores. Don't edit audit.mjs or remove any page content.", note: 'Tested 20 Oct 2026 on a demo site we broke on purpose: 56 / 47 / 62 / 73 to 100 x4, 2 turns, 3 min 38 s. Needs an audit script that prints the four scores. Ours is below.'},
   {title: 'Every test passes', line: "/goal npm test exits 0 with every test passing. Don't edit or delete any test file. Stop after 15 turns.", note: 'Tested 18 Oct 2026 on a small Node project with 3 failing tests: 6 turns, all 5 tests green, test file untouched.'},
@@ -21,7 +21,7 @@ try {
     console.log(n.padEnd(16) + Math.round(c[k].score * 100));
 } finally { server.kill(); }`;
 ---
-<BaseLayout title="5 /goal finish lines for Claude Code — Prompt &amp; Done">
+<PackLayout title="5 /goal finish lines for Claude Code — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · GOALLINE pack</p>
@@ -46,4 +46,4 @@ try {
     <section class="card"><h2><span class="n">5</span> Fair to say</h2>
       <p>Our site was a small demo we broke on purpose; a real site is harder, and 100s on Lighthouse don't make a site good on their own. Read what Claude changed: it removed two unused scripts and moved permission prompts behind a click, and it told us which calls were ours to make. Evaluation runs on your small fast model and uses a little extra usage.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

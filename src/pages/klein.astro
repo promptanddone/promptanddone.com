@@ -1,12 +1,12 @@
 ---
 // promptanddone.com/klein: the KLEIN pack (DM deliverable for the "flux-klein-local-photo-edit" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = "# Apple silicon Mac, about 15 GB free disk for the first download\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nuv tool install --with \"pillow<12\" mflux   # the pin avoids a Pillow 12 import error we hit on Python 3.12/3.14";
 const makeIt = "mflux-generate-flux2 --model flux2-klein-4b --steps 4 \\\n  --width 864 --height 1536 --seed 6 --output base.png \\\n  --prompt \"A bakery storefront seen straight on from the street on a bright morning, a large flat wooden sign across the top reading 'SUNRISE BAKERY' in big cream letters, a big arched shop window full of sourdough loaves, croissants and pastries, a blue door, potted geraniums, wet cobblestone street, golden sunrise light, photograph\"";
 const editIt = "mflux-generate-flux2-edit --model flux2-klein-4b --steps 4 \\\n  --image-paths base.png --seed 1 --output snow.png \\\n  --prompt \"The same bakery storefront straight on, at night in heavy snowfall, snow on the sign and window ledge, glowing warm window light, the sign still reads 'SUNRISE BAKERY', photograph\"";
 const more = "# paint it red\n\"The same bakery storefront straight on in the same morning light, but the arched window frame, the door and the lower wall are painted bright red, the sign reads 'SUNRISE BAKERY', photograph\"\n\n# watercolor\n\"The same bakery storefront straight on as a bold gouache and watercolor illustration, saturated colors, visible brush strokes and ink outlines, paper texture, the sign reads 'SUNRISE BAKERY'\"\n\n# add a cat (two reference images: the photo and a picture of a cat)\nmflux-generate-flux2-edit --model flux2-klein-4b --steps 4 --image-paths base.png cat.png --seed 7 \\\n  --prompt \"The same bakery storefront straight on in the morning, a large fluffy ginger cat sitting in the center of the big arched shop window in front of the bread, clearly visible, the sign reads 'SUNRISE BAKERY', photograph\"";
 ---
-<BaseLayout title="FLUX.2 klein on your Mac: the KLEIN pack — Prompt &amp; Done">
+<PackLayout title="FLUX.2 klein on your Mac: the KLEIN pack — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · KLEIN pack</p>
@@ -36,4 +36,4 @@ const more = "# paint it red\n\"The same bakery storefront straight on in the sa
     <section class="card"><h2><span class="n">5</span> Licenses</h2>
       <p>FLUX.2 [klein] 4B is Apache 2.0; the 9B model and the newer FLUX 3 Image Klein use other licenses (non-commercial or the FLUX Kommunity License, and they need a Hugging Face login), so check before using them. mflux is MIT. Read the model card's limits: it can misrender text and may not follow every prompt.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

@@ -1,6 +1,6 @@
 ---
 // promptanddone.com/bughunt: the BUGHUNT pack (DM deliverable for the "claude-code-review-bug-hunt" reel).
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const cmds = '/code-review\n/code-review high\n/code-review high --fix';
 const levels = ['low', 'medium', 'high', 'xhigh', 'max'];
 const f0 = "async function cartTotal(items) {\n  let sum = 0;\n  for (let i = 0; i <= items.length; i++) {\n    sum += items[i].price * items[i].qty;\n  }\n  return sum;\n}\n\nasync function applyCoupon(code, sum) {\n  const coupon = fetch(`https://api.cornershop.dev/coupons/${code}`).then((r) => r.json());\n  if (coupon.valid) return sum * (1 - coupon.discount);\n  return sum;\n}\n\nmodule.exports = { cartTotal, applyCoupon };\n";
@@ -13,7 +13,7 @@ const srv = "const express = require('express');\nconst app = express();\napp.us
 const files = [['src/server.js', srv], ['src/cart.js', f0], ['src/payments.js', f1], ['src/users.js', f2], ['src/routes.js', f3], ['src/db.js', db], ['package.json', pkg]];
 const planted = [["src/cart.js:3", "for (let i = 0; i <= items.length; i++): off-by-one, every checkout throws a TypeError"], ["src/cart.js:10", "the coupon fetch is missing await, so coupons never apply"], ["src/payments.js:1", "a hardcoded sk_live_ Stripe key (a FAKE value in this demo)"], ["src/users.js:5", "SQL injection: the email is pasted into the query string"], ["src/users.js:9", "unsalted MD5 password hashing"]];
 ---
-<BaseLayout title="Planted-bug demo repo + /code-review — Prompt &amp; Done">
+<PackLayout title="Planted-bug demo repo + /code-review — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · BUGHUNT pack</p>
@@ -33,4 +33,4 @@ const planted = [["src/cart.js:3", "for (let i = 0; i <= items.length; i++): off
     <section class="card"><h2><span class="n">4</span> Still on you</h2>
       <p>Rotate any key that ever reached git history (deleting the line is not enough). Our fix also needed a products table and a <code>stripe_customer_id</code> column, plus a password reset for existing MD5 hashes. One run on one planted branch is not a guarantee: it does not catch every bug and does not replace a human review.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

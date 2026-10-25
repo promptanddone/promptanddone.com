@@ -1,11 +1,11 @@
 ---
 // promptanddone.com/slop: the SLOP pack (DM deliverable for the "hallmark-anti-slop-design" reel). Prepared, not deployed.
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PackLayout from '../layouts/PackLayout.astro';
 const install = "# needs Node 18+ and a coding agent (we used Claude Code)\nnpx skills add nutlope/hallmark --agent claude-code\n# or for every project and every agent: npx skills add nutlope/hallmark -g";
 const build = "# in Claude Code, inside your project\n/hallmark Build a one-page website for Pawline, a dog-walking service in Austin, Texas: people can book a walk, see the prices and meet the walkers. Single self-contained index.html. Infer everything, ask no questions.";
 const redo = "/hallmark redesign ./index.html     # rebuilds the page, keeps content and wiring\n/hallmark audit ./index.html        # only reports\nnode .claude/skills/hallmark/scripts/sloplint.mjs ./index.html   # the linter on its own";
 ---
-<BaseLayout title="Stop your AI sites looking the same: the SLOP pack — Prompt &amp; Done">
+<PackLayout title="Stop your AI sites looking the same: the SLOP pack — Prompt &amp; Done">
   <main>
     <header>
       <p class="kicker"><a href="/">Prompt &amp; Done</a> · SLOP pack</p>
@@ -31,4 +31,4 @@ const redo = "/hallmark redesign ./index.html     # rebuilds the page, keeps con
       </tbody></table>
       <p>Costs are API-equivalent. Honest limits: the linter is Hallmark's own rulebook (some plain-page fails are Hallmark-only rules, like the missing Hallmark stamp); whether a page looks better is taste; two prompts, one run each; we did not compare other design skills; Hallmark used about 3x the tokens and 2.5x the time; its browser render check needs <code>npm i -g puppeteer-core</code> and did not run in our test; the walker names and prices both models invented are stand-ins.</p></section>
   </main>
-</BaseLayout>
+</PackLayout>

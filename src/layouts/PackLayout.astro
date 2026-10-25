@@ -1,0 +1,14 @@
+---
+// Shared layout for every resource ("pack") page that a /go/<keyword> link points to.
+import BaseLayout from './BaseLayout.astro';
+import '../styles/pack.css';
+interface Props { title: string; }
+const { title } = Astro.props;
+---
+<BaseLayout title={title}>
+  <slot />
+  <footer class="pack-foot">
+    <span>© Prompt &amp; Done</span>
+    <a href="/">More from the videos →</a>
+  </footer>
+</BaseLayout>
